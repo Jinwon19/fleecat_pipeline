@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fleecat API Documentation - Step 2 핵심 API</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f7fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            margin-bottom: 40px;
+            border-radius: 12px;
+        }
+
+        header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .base-url {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 4px solid #667eea;
+        }
+
+        .base-url strong {
+            color: #667eea;
+        }
+
+        .base-url code {
+            background: #f3f4f6;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #e74c3c;
+        }
+
+        .api-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .api-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f3f4f6;
+        }
+
+        .api-number {
+            background: #667eea;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .api-title {
+            flex: 1;
+        }
+
+        .api-title h2 {
+            font-size: 22px;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .api-method {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 12px;
+            margin-right: 10px;
+        }
+
+        .method-post {
+            background: #10b981;
+            color: white;
+        }
+
+        .method-get {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .api-path {
+            font-family: 'Courier New', monospace;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .api-auth {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #fee2e2;
+            color: #991b1b;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+
+        .api-auth.public {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #667eea;
+            margin: 25px 0 15px;
+            padding-left: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .code-block .key {
+            color: #7dd3fc;
+        }
+
+        .code-block .string {
+            color: #86efac;
+        }
+
+        .code-block .number {
+            color: #fbbf24;
+        }
+
+        .code-block .boolean {
+            color: #f472b6;
+        }
+
+        .field-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        .field-table th,
+        .field-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .field-table th {
+            background: #f9fafb;
+            font-weight: 600;
+            color: #374151;
+            font-size: 13px;
+        }
+
+        .field-table td {
+            font-size: 13px;
+        }
+
+        .required {
+            color: #ef4444;
+            font-weight: bold;
+        }
+
+        .optional {
+            color: #6b7280;
+        }
+
+        .note {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .note strong {
+            color: #92400e;
+        }
+
+        .success-response {
+            border-left: 4px solid #10b981;
+        }
+
+        .error-response {
+            border-left: 4px solid #ef4444;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            header {
+                padding: 30px 15px;
+            }
+
+            .api-section {
+                padding: 20px;
+            }
+
+            .api-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 Fleecat API Documentation</h1>
+            <p>Step 2 핵심 API 8개 - 프론트엔드 개발 가이드</p>
+        </header>
+
+        <div class="base-url">
+            <strong>🌐 Base URL:</strong> <code>https://fleecat-production.up.railway.app/api/v1</code>
+        </div>
+
+        <!-- API 1: 회원가입 -->
+        <div class="api-section">
+            <div class="api-header">
+                <div class="api-number">1</div>
+                <div class="api-title">
+                    <h2>회원가입</h2>
+                    <div>
+                        <span class="api-method method-post">POST</span>
+                        <span class="api-path">/auth/register</span>
+                        <span class="api-auth public">Public</span>
+                    </div>
+                </div>
+            </div>
+
+            <p style="margin-bottom: 20px;">새로운 회원을 등록합니다. 이메일 중복 체크가 자동으로 수행됩니다.</p>
+
+            <div class="section-title">📥 Request Body</div>
+            <table class="field-table">
+                <thead>
+                    <tr>
+                        <th>필드명</th>
+                        <th>타입</th>
+                        <th>필수</th>
+                        <th>설명</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>email</code></td>
+                        <td>string</td>
+                        <td><span class="required">필수</span></td>
+                        <td>이메일 (최대 255자, 이메일 형식)</td>
+                    </tr>
+                    <tr>
+                        <td><code>password</code></td>
+                        <td>string</td>
+                        <td><span class="required">필수</span></td>
+                        <td>비밀번호 (8자 이상, 영문+숫자 포함)</td>
+                    </tr>
+                    <tr>
+                        <td><code>name</code></td>
+                        <td>string</td>
+                        <td><span class="required">필수</span></td>
+                        <td>이름 (2~30자)</td>
+                    </tr>
+                    <tr>
+                        <td><code>nickname</code></td>
+                        <td>string</td>
+                        <td><span class="required">필수</span></td>
+                        <td>닉네임 (2~20자, 영문/숫자/한글만)</td>
+                    </tr>
+                    <tr>
+                        <td><code>phone</code></td>
+                        <td>string</td>
+                        <td><span class="optional">선택</span></td>
+                        <td>전화번호 (010-1234-5678 형식)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="section-title">✅ Success Response (201)</div>
+            <pre class="code-block success-response">{
+  <span class="key">"success"</span>: <span class="boolean">true</span>,
+  <span class="key">"message"</span>: <span class="string">"회원가입이 완료되었습니다."</span>,
+  <span class="key">"data"</span>: {
+    <span class="key">"member_id"</span>: <span class="string">"1"</span>,
+    <span class="key">"member_email"</span>: <span class="string">"user@example.com"</span>,
+    <span class="key">"member_name"</span>: <span class="string">"홍길동"</span>,
+    <span class="key">"member_nickname"</span>: <span class="string">"길동"</span>,
+    <span class="key">"member_status"</span>: <span class="string">"active"</span>
+  }
+}</pre>
+
+            <div class="section-title">❌ Error Response (400)</div>
+            <pre class="code-block error-response">{
+  <span class="key">"success"</span>: <span class="boolean">false</span>,
+  <span class="key">"message"</span>: <span class="string">"이미 사용 중인 이메일입니다."</span>
+}</pre>
+        </div>
+
+        <!-- API 2: 로그인 -->
+        <div class="api-section">
+            <div class="api-header">
+                <div class="api-number">2</div>
+                <div class="api-title">
+                    <h2>로그인</h2>
+                    <div>
+                        <span class="api-method method-post">POST</span>
+                        <span class="api-path">/auth/login</span>
+                        <span class="api-auth public">Public</span>
+                    </div>
+                </div>
+            </div>
+
+            <p style="margin-bottom: 20px;">이메일과 비밀번호로 로그인하여 JWT 토큰을 발급받습니다.</p>
+
+            <div class="section-title">📥 Request Body</div>
+            <table class="field-table">
+                <thead>
+                    <tr>
+                        <th>필드명</th>
+                        <th>타입</th>
+                        <th>필수</th>
+                        <th>설명</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>email</code></td>
+                        <td>string</td>
+                        <td><span class="required">필수</span></td>
+                        <td>이메일</td>
+                    </tr>
+                    <tr>
+                        <td><code>password</code></td>
+                        <td>string</td>
+                        <td><span class="required">필수</span></td>
+                        <td>비밀번호</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="section-title">✅ Success Response (200)</div>
+            <pre class="code-block success-response">{
+  <span class="key">"success"</span>: <span class="boolean">true</span>,
+  <span class="key">"message"</span>: <span class="string">"로그인에 성공했습니다."</span>,
+  <span class="key">"data"</span>: {
+    <span class="key">"token"</span>: <span class="string">"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."</span>,
+    <span class="key">"member"</span>: {
+      <span class="key">"member_id"</span>: <span class="string">"1"</span>,
+      <span class="key">"member_email"</span>: <span class="string">"user@example.com"</span>,
+      <span class="key">"member_name"</span>: <span class="string">"홍길동"</span>,
+      <span class="key">"member_role"</span>: <span class="string">"user"</span>
+    }
+  }
+}</pre>
+
+            <div class="note">
+                <strong>💡 중요:</strong> 발급받은 token은 이후 모든 Private API 호출 시 Authorization 헤더에 포함해야 합니다.<br>
+                <code>Authorization: Bearer {token}</code>
+            </div>
+        </div>
+
+        <!-- API 3: 판매사 등록 -->
+        <div class="api-section">
+            <div class="api-header">
+                <div class="api-number">3</div>
+                <div class="api-title">
+                    <h2>판매사 등록</h2>
+                    <div>
+                        <span class="api-method method-post">POST</span>
+                        <span class="api-path">/tenants</span>
+                        <span class="api-auth">Private</span>
+                    </div>
+                </div>
+            </div>
+
+            <p style="margin-bottom: 20px;">새로운 판매사(공방)를 등록 신청합니다. 관리자 승인 후 활성화됩니다.</p>
+
+            <div class="section-title">📥 Request Body</div>
+            <table class="field-table">
+                <thead>
+                    <tr>
+                        <th>필드명</th>
+                        <th>타입</th>
+                        <th>필수</th>
+                        <th>설명</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>tenant_name</code></td>
+                        <td>string</td>
+                        <td><span class="required">필수</span></td>
+                        <td>판매사명 (2~50자)</td>
+                    </tr>
+                    <tr>
+                        <td><code>tenant_detail_phone</code></td>
+                        <td>string</td>
+                        <td><span class="required">필수</span></td>
+                        <td>대표 전화번호</td>
+                    </tr>
+                    <tr>
+                        <td><code>tenant_detail_email</code></td>
+                        <td>string</td>
+                        <td><span class="required">필수</span></td>
+                        <td>대표 이메일</td>
+                    </tr>
+                    <tr>
+                        <td><code>tenant_detail_description</code></td>
+                        <td>string</td>
+                        <td><span class="optional">선택</span></td>
+                        <td>판매사 소개 (최대 1000자)</td>
+                    </tr>
+                    <tr>
+                        <td><code>tenant_detail_address</code></td>
+                        <td>string</td>
+                        <td><span class="optional">선택</span></td>
+                        <td>주소 (최대 200자)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="section-title">✅ Success Response (201)</div>
+            <pre class="code-block success-response">{
+  <span class="key">"success"</span>: <span class="boolean">true</span>,
+  <span class="key">"message"</span>: <span class="string">"판매사 등록 신청이 완료되었습니다."</span>,
+  <span class="key">"data"</span>: {
+    <span class="key">"tenant_id"</span>: <span class="string">"1"</span>,
+    <span class="key">"tenant_name"</span>: <span class="string">"홍길동의 공방"</span>,
+    <span class="key">"tenant_status"</span>: <span class="string">"pending"</span>,
+    <span class="key">"tenant_applied_at"</span>: <span class="string">"2025-01-15T10:30:00.000Z"</span>
+  }
+}</pre>
+
+            <div class="note">
+                <strong>⚠️ 주의:</strong> 판매사 등록 후 상태는 'pending'이며, 관리자 승인 후 'approved'로 변경됩니다.
+            </div>
+        </div>
+
+        <!-- API 4: 판매사 가입 신청 -->
+        <div class="api-section">
+            <div class="api-header">
+                <div class="api-number">4</div>
+                <div class="api-title">
+                    <h2>판매사 구성원 가입</h2>
+                    <div>
+                        <span class="api-method method-post">POST</span>
+                        <span class="api-path">/tenants/:id/members</span>
+                        <span class="api-auth">Private</span>
+                    </div>
+                </div>
+            </div>
+
+            <p style="margin-bottom: 20px;">기존 판매사에 구성원으로 가입 신청합니다. Owner 승인 후 판매 활동이 가능합니다.</p>
+
+            <div class="section-title">📥 Request Body</div>
+            <table class="field-table">
+                <thead>
+                    <tr>
+                        <th>필드명</th>
+                        <th>타입</th>
+                        <th>필수</th>
+                        <th>설명</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>tenant_member_role</code></td>
+                        <td>string</td>
+                        <td><span class="required">필수</span></td>
+                        <td>"owner" 또는 "member"</td>
+                    </tr>
+                    <tr>
+                        <td><code>tenant_member_bank_name</code></td>
+                        <td>string</td>
+                        <td><span class="optional">선택</span></td>
+                        <td>은행명 (최대 50자)</td>
+                    </tr>
+                    <tr>
+                        <td><code>tenant_member_bank_account</code></td>
+                        <td>string</td>
+                        <td><span class="optional">선택</span></td>
+                        <td>계좌번호 (최대 50자)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="section-title">✅ Success Response (201)</div>
+            <pre class="code-block success-response">{
+  <span class="key">"success"</span>: <span class="boolean">true</span>,
+  <span class="key">"message"</span>: <span class="string">"판매사 가입 신청이 완료되었습니다."</span>,
+  <span class="key">"data"</span>: {
+    <span class="key">"tenant_member_id"</span>: <span class="string">"1"</span>,
+    <span class="key">"tenant_id"</span>: <span class="string">"1"</span>,
+    <span class="key">"member_id"</span>: <span class="string">"2"</span>,
+    <span class="key">"tenant_member_role"</span>: <span class="string">"member"</span>,
+    <span class="key">"tenant_member_approval_status"</span>: <span class="string">"pending"</span>
+  }
+}</pre>
+        </div>
+
+        <!-- API 5: 카테고리 트리 조회 -->
+        <div class="api-section">
+            <div class="api-header">
+                <div class="api-number">5</div>
+                <div class="api-title">
+                    <h2>카테고리 트리 조회</h2>
+                    <div>
+                        <span class="api-method method-get">GET</span>
+                        <span class="api-path">/categories/tree</span>
+                        <span class="api-auth public">Public</span>
+                    </div>
+                </div>
+            </div>
+
+            <p style="margin-bottom: 20px;">계층형 카테고리 전체를 트리 구조로 조회합니다 (최대 3단계).</p>
+
+            <div class="section-title">🔍 Query Parameters</div>
+            <table class="field-table">
+                <thead>
+                    <tr>
+                        <th>파라미터</th>
+                        <th>타입</th>
+                        <th>필수</th>
+                        <th>설명</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>includeInactive</code></td>
+                        <td>boolean</td>
+                        <td><span class="optional">선택</span></td>
+                        <td>비활성 카테고리 포함 여부 (기본값: false)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="section-title">✅ Success Response (200)</div>
+            <pre class="code-block success-response">{
+  <span class="key">"success"</span>: <span class="boolean">true</span>,
+  <span class="key">"message"</span>: <span class="string">"카테고리 트리를 조회했습니다."</span>,
+  <span class="key">"data"</span>: [
+    {
+      <span class="key">"category_id"</span>: <span class="string">"1"</span>,
+      <span class="key">"category_name"</span>: <span class="string">"가구"</span>,
+      <span class="key">"category_level"</span>: <span class="number">1</span>,
+      <span class="key">"children"</span>: [
+        {
+          <span class="key">"category_id"</span>: <span class="string">"2"</span>,
+          <span class="key">"category_name"</span>: <span class="string">"의자"</span>,
+          <span class="key">"category_level"</span>: <span class="number">2</span>,
+          <span class="key">"children"</span>: []
+        }
+      ]
+    }
+  ]
+}</pre>
+        </div>
+
+        <!-- API 6: 상품 목록 조회 -->
+        <div class="api-section">
+            <div class="api-header">
+                <div class="api-number">6</div>
+                <div class="api-title">
+                    <h2>상품 목록 조회</h2>
+                    <div>
+                        <span class="api-method method-get">GET</span>
+                        <span class="api-path">/products</span>
+                        <span class="api-auth public">Public</span>
+                    </div>
+                </div>
+            </div>
+
+            <p style="margin-bottom: 20px;">상품 목록을 필터링/정렬/페이징하여 조회합니다.</p>
+
+            <div class="section-title">🔍 Query Parameters</div>
+            <table class="field-table">
+                <thead>
+                    <tr>
+                        <th>파라미터</th>
+                        <th>타입</th>
+                        <th>필수</th>
+                        <th>설명</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>page</code></td>
+                        <td>number</td>
+                        <td><span class="optional">선택</span></td>
+                        <td>페이지 번호 (기본값: 1)</td>
+                    </tr>
+                    <tr>
+                        <td><code>limit</code></td>
+                        <td>number</td>
+                        <td><span class="optional">선택</span></td>
+                        <td>페이지당 항목 수 (기본값: 20, 최대: 100)</td>
+                    </tr>
+                    <tr>
+                        <td><code>categoryId</code></td>
+                        <td>number</td>
+                        <td><span class="optional">선택</span></td>
+                        <td>카테고리 ID</td>
+                    </tr>
+                    <tr>
+                        <td><code>tenantId</code></td>
+                        <td>number</td>
+                        <td><span class="optional">선택</span></td>
+                        <td>판매사 ID</td>
+                    </tr>
+                    <tr>
+                        <td><code>search</code></td>
+                        <td>string</td>
+                        <td><span class="optional">선택</span></td>
+                        <td>상품명 검색어</td>
+                    </tr>
+                    <tr>
+                        <td><code>minPrice</code></td>
+                        <td>number</td>
+                        <td><span class="optional">선택</span></td>
+                        <td>최소 가격</td>
+                    </tr>
+                    <tr>
+                        <td><code>maxPrice</code></td>
+                        <td>number</td>
+                        <td><span class="optional">선택</span></td>
+                        <td>최대 가격</td>
+                    </tr>
+                    <tr>
+                        <td><code>sortBy</code></td>
+                        <td>string</td>
+                        <td><span class="optional">선택</span></td>
+                        <td>정렬 기준 (created_at, price, view_count)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="section-title">✅ Success Response (200)</div>
+            <pre class="code-block success-response">{
+  <span class="key">"success"</span>: <span class="boolean">true</span>,
+  <span class="key">"message"</span>: <span class="string">"상품 목록을 조회했습니다."</span>,
+  <span class="key">"data"</span>: {
+    <span class="key">"products"</span>: [
+      {
+        <span class="key">"product_id"</span>: <span class="string">"1"</span>,
+        <span class="key">"product_name"</span>: <span class="string">"수제 원목 의자"</span>,
+        <span class="key">"product_price"</span>: <span class="number">150000</span>,
+        <span class="key">"product_stock"</span>: <span class="number">10</span>,
+        <span class="key">"product_status"</span>: <span class="string">"active"</span>,
+        <span class="key">"category"</span>: {
+          <span class="key">"category_id"</span>: <span class="string">"2"</span>,
+          <span class="key">"category_name"</span>: <span class="string">"의자"</span>
+        },
+        <span class="key">"images"</span>: [
+          {
+            <span class="key">"product_img_url"</span>: <span class="string">"https://..."</span>,
+            <span class="key">"product_img_sequence"</span>: <span class="number">1</span>
+          }
+        ]
+      }
+    ],
+    <span class="key">"pagination"</span>: {
+      <span class="key">"currentPage"</span>: <span class="number">1</span>,
+      <span class="key">"totalPages"</span>: <span class="number">5</span>,
+      <span class="key">"totalItems"</span>: <span class="number">95</span>,
+      <span class="key">"limit"</span>: <span class="number">20</span>
+    }
+  }
+}</pre>
+        </div>
+
+        <!-- API 7: 상품 등록 -->
+        <div class="api-section">
+            <div class="api-header">
+                <div class="api-number">7</div>
+                <div class="api-title">
+                    <h2>상품 등록</h2>
+                    <div>
+                        <span class="api-method method-post">POST</span>
+                        <span class="api-path">/products</span>
+                        <span class="api-auth">Private</span>
+                    </div>
+                </div>
+            </div>
+
+            <p style="margin-bottom: 20px;">새로운 상품을 등록합니다. 승인된 TenantMember만 등록 가능합니다.</p>
+
+            <div class="section-title">📥 Request Body</div>
+            <table class="field-table">
+                <thead>
+                    <tr>
+                        <th>필드명</th>
+                        <th>타입</th>
+                        <th>필수</th>
+                        <th>설명</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>tenant_member_id</code></td>
+                        <td>number</td>
+                        <td><span class="required">필수</span></td>
+                        <td>판매자 ID</td>
+                    </tr>
+                    <tr>
+                        <td><code>category_id</code></td>
+                        <td>number</td>
+                        <td><span class="required">필수</span></td>
+                        <td>카테고리 ID</td>
+                    </tr>
+                    <tr>
+                        <td><code>product_name</code></td>
+                        <td>string</td>
+                        <td><span class="required">필수</span></td>
+                        <td>상품명 (2~100자)</td>
+                    </tr>
+                    <tr>
+                        <td><code>product_price</code></td>
+                        <td>number</td>
+                        <td><span class="required">필수</span></td>
+                        <td>가격 (0 초과)</td>
+                    </tr>
+                    <tr>
+                        <td><code>product_stock</code></td>
+                        <td>number</td>
+                        <td><span class="required">필수</span></td>
+                        <td>재고 수량 (0 이상)</td>
+                    </tr>
+                    <tr>
+                        <td><code>product_description</code></td>
+                        <td>string</td>
+                        <td><span class="optional">선택</span></td>
+                        <td>상품 설명 (최대 2000자)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="section-title">✅ Success Response (201)</div>
+            <pre class="code-block success-response">{
+  <span class="key">"success"</span>: <span class="boolean">true</span>,
+  <span class="key">"message"</span>: <span class="string">"상품이 등록되었습니다."</span>,
+  <span class="key">"data"</span>: {
+    <span class="key">"product_id"</span>: <span class="string">"1"</span>,
+    <span class="key">"product_name"</span>: <span class="string">"수제 원목 의자"</span>,
+    <span class="key">"product_price"</span>: <span class="number">150000</span>,
+    <span class="key">"product_stock"</span>: <span class="number">10</span>,
+    <span class="key">"product_status"</span>: <span class="string">"active"</span>,
+    <span class="key">"category_id"</span>: <span class="string">"2"</span>,
+    <span class="key">"tenant_member_id"</span>: <span class="string">"1"</span>
+  }
+}</pre>
+
+            <div class="note">
+                <strong>💡 추가 작업:</strong> 상품 등록 후 <code>POST /products/:productId/images</code> API로 상품 이미지를 업로드할 수 있습니다 (최대 10개).
+            </div>
+        </div>
+
+        <!-- API 8: 상품 상세 조회 -->
+        <div class="api-section">
+            <div class="api-header">
+                <div class="api-number">8</div>
+                <div class="api-title">
+                    <h2>상품 상세 조회</h2>
+                    <div>
+                        <span class="api-method method-get">GET</span>
+                        <span class="api-path">/products/:productId</span>
+                        <span class="api-auth public">Public</span>
+                    </div>
+                </div>
+            </div>
+
+            <p style="margin-bottom: 20px;">상품의 상세 정보를 조회합니다. 조회 시 조회수가 자동으로 증가합니다.</p>
+
+            <div class="section-title">✅ Success Response (200)</div>
+            <pre class="code-block success-response">{
+  <span class="key">"success"</span>: <span class="boolean">true</span>,
+  <span class="key">"message"</span>: <span class="string">"상품 상세를 조회했습니다."</span>,
+  <span class="key">"data"</span>: {
+    <span class="key">"product_id"</span>: <span class="string">"1"</span>,
+    <span class="key">"product_name"</span>: <span class="string">"수제 원목 의자"</span>,
+    <span class="key">"product_description"</span>: <span class="string">"100% 국내산 원목으로 제작한 의자입니다."</span>,
+    <span class="key">"product_price"</span>: <span class="number">150000</span>,
+    <span class="key">"product_stock"</span>: <span class="number">10</span>,
+    <span class="key">"product_status"</span>: <span class="string">"active"</span>,
+    <span class="key">"product_view_count"</span>: <span class="number">254</span>,
+    <span class="key">"category"</span>: {
+      <span class="key">"category_id"</span>: <span class="string">"2"</span>,
+      <span class="key">"category_name"</span>: <span class="string">"의자"</span>,
+      <span class="key">"parent_category_id"</span>: <span class="string">"1"</span>
+    },
+    <span class="key">"tenant_member"</span>: {
+      <span class="key">"tenant_member_id"</span>: <span class="string">"1"</span>,
+      <span class="key">"tenant"</span>: {
+        <span class="key">"tenant_id"</span>: <span class="string">"1"</span>,
+        <span class="key">"tenant_name"</span>: <span class="string">"홍길동의 공방"</span>
+      },
+      <span class="key">"member"</span>: {
+        <span class="key">"member_name"</span>: <span class="string">"홍길동"</span>,
+        <span class="key">"member_nickname"</span>: <span class="string">"길동"</span>
+      }
+    },
+    <span class="key">"images"</span>: [
+      {
+        <span class="key">"product_img_id"</span>: <span class="string">"1"</span>,
+        <span class="key">"product_img_url"</span>: <span class="string">"https://example.com/image1.jpg"</span>,
+        <span class="key">"product_img_sequence"</span>: <span class="number">1</span>
+      }
+    ],
+    <span class="key">"product_created_at"</span>: <span class="string">"2025-01-15T10:30:00.000Z"</span>
+  }
+}</pre>
+
+            <div class="section-title">❌ Error Response (404)</div>
+            <pre class="code-block error-response">{
+  <span class="key">"success"</span>: <span class="boolean">false</span>,
+  <span class="key">"message"</span>: <span class="string">"상품을 찾을 수 없습니다."</span>
+}</pre>
+        </div>
+
+        <!-- 공통 응답 형식 -->
+        <div class="api-section">
+            <h2 style="margin-bottom: 20px;">📋 공통 사항</h2>
+
+            <div class="section-title">🔐 인증 (Authentication)</div>
+            <p style="margin-bottom: 15px;">Private API는 JWT 토큰을 헤더에 포함해야 합니다:</p>
+            <pre class="code-block">Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</pre>
+
+            <div class="section-title">🚨 공통 에러 응답</div>
+            <table class="field-table">
+                <thead>
+                    <tr>
+                        <th>상태 코드</th>
+                        <th>설명</th>
+                        <th>예시</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>400</code></td>
+                        <td>잘못된 요청 (Validation 실패)</td>
+                        <td>필수 필드 누락, 형식 오류</td>
+                    </tr>
+                    <tr>
+                        <td><code>401</code></td>
+                        <td>인증 실패</td>
+                        <td>토큰 없음, 토큰 만료</td>
+                    </tr>
+                    <tr>
+                        <td><code>403</code></td>
+                        <td>권한 없음</td>
+                        <td>관리자 전용 API 접근</td>
+                    </tr>
+                    <tr>
+                        <td><code>404</code></td>
+                        <td>리소스 없음</td>
+                        <td>존재하지 않는 ID 조회</td>
+                    </tr>
+                    <tr>
+                        <td><code>500</code></td>
+                        <td>서버 오류</td>
+                        <td>예상치 못한 서버 에러</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="note" style="margin-top: 20px;">
+                <strong>💡 Tip:</strong> 모든 응답은 <code>{ success, message, data }</code> 형식을 따릅니다.
+                에러 발생 시 <code>success: false</code>와 <code>message</code>를 확인하세요.
+            </div>
+        </div>
+
+        <footer>
+            <p>Fleecat API Documentation v1.0 | Last Updated: 2025-01-15</p>
+            <p style="margin-top: 10px;">
+                📧 문의: <a href="mailto:dev@fleecat.com" style="color: #667eea;">dev@fleecat.com</a>
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

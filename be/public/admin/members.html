@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원 관리 - Fleecat Admin</title>
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>🔐 Fleecat Admin</h2>
+            </div>
+            <nav>
+                <ul class="sidebar-nav">
+                    <li><a href="dashboard.html">📊 대시보드</a></li>
+                    <li><a href="members.html" class="active">👥 회원 관리</a></li>
+                    <li><a href="tenants.html">🏪 판매사 관리</a></li>
+                    <li><a href="tenant-members.html">👔 판매사 구성원 관리</a></li>
+                    <li><a href="categories.html">📂 카테고리 관리</a></li>
+                    <li><a href="products.html">🛍️ 상품 관리</a></li>
+                    <li><a href="orders.html">📦 주문 관리</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1>회원 관리</h1>
+                <div class="page-actions">
+                    <span id="userEmail"></span>
+                    <button class="btn btn-secondary btn-sm" id="logoutButton">로그아웃</button>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="card">
+                <div class="card-header">검색 및 필터</div>
+                <div class="card-body">
+                    <div class="filter-row">
+                        <input type="text" id="searchInput" placeholder="이메일 또는 닉네임 검색" class="form-control">
+                        <select id="statusFilter" class="form-control">
+                            <option value="">전체 상태</option>
+                            <option value="active">활성</option>
+                            <option value="suspended">정지</option>
+                            <option value="inactive">비활성</option>
+                        </select>
+                        <select id="roleFilter" class="form-control">
+                            <option value="">전체 역할</option>
+                            <option value="buyer">구매자</option>
+                            <option value="seller">판매자</option>
+                            <option value="admin">관리자</option>
+                        </select>
+                        <button class="btn btn-primary" id="searchButton">검색</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Member Stats -->
+            <div class="stats-grid" id="memberStatsGrid">
+                <div class="stat-card">
+                    <h3>전체 회원</h3>
+                    <div class="stat-value" id="totalMembers">-</div>
+                </div>
+                <div class="stat-card">
+                    <h3>활성 회원</h3>
+                    <div class="stat-value" id="activeMembers">-</div>
+                </div>
+                <div class="stat-card">
+                    <h3>정지된 회원</h3>
+                    <div class="stat-value" id="suspendedMembers">-</div>
+                </div>
+            </div>
+
+            <!-- Member List -->
+            <div class="card">
+                <div class="card-header">
+                    회원 목록
+                    <span id="memberCount" class="badge">0</span>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>이메일</th>
+                                <th>닉네임</th>
+                                <th>역할</th>
+                                <th>상태</th>
+                                <th>가입일</th>
+                                <th>작업</th>
+                            </tr>
+                        </thead>
+                        <tbody id="memberTableBody">
+                            <tr>
+                                <td colspan="7" class="text-center">데이터를 불러오는 중...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" id="pagination"></div>
+        </main>
+    </div>
+
+    <!-- Member Detail Modal -->
+    <div id="memberModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>회원 상세</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body" id="memberDetailContent">
+                <!-- Member details will be loaded here -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="closeModal">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/members.js"></script>
+</body>
+</html>

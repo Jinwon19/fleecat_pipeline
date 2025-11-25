@@ -1,0 +1,137 @@
+.banner-section {
+  padding: 16px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+.banner-container {
+  max-width: 80rem;
+  flex: 1;
+  position: relative;
+}
+
+/* Swiper container */
+.banner-swiper {
+  height: 600px;
+  margin: 0 -80px;
+  padding: 0 80px;
+}
+
+/* Swiper slide */
+.banner-slide {
+  width: 100% !important;
+  height: 100%;
+  opacity: 0.4;
+  transition: opacity 0.5s ease-in-out;
+  flex-shrink: 0;
+}
+
+.banner-slide.swiper-slide-active {
+  opacity: 1;
+}
+
+.banner-slide.swiper-slide-duplicate-active {
+  opacity: 1;
+}
+
+.banner-slide-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: #f3f4f6;
+  cursor: pointer;
+}
+
+.banner-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.banner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: transparent;
+  transition: background-color 0.2s ease;
+}
+
+.banner-slide-content:hover .banner-overlay {
+  background-color: transparent;
+}
+
+.banner-content {
+  position: absolute;
+  left: 48px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: white;
+}
+
+.banner-title {
+  font-size: 36px;
+  font-weight: bold;
+  margin: 0 0 16px 0;
+}
+
+.banner-subtitle {
+  font-size: 18px;
+  margin: 0 0 24px 0;
+}
+
+/* Custom Navigation Buttons */
+.banner-nav-btn {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+
+.banner-nav-btn:hover {
+  border-color: #FF69B4;
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.banner-nav-icon {
+  width: 28px;
+  height: 28px;
+  color: #000;
+  stroke-width: 2.5;
+  transition: all 0.3s ease;
+}
+
+.banner-nav-btn:hover .banner-nav-icon {
+  color: #FF69B4;
+}
+
+/* Page indicator */
+.banner-page-indicator {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  color: white;
+  padding: 6px 16px;
+  border-radius: 9999px;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 10;
+}

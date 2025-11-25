@@ -1,0 +1,26 @@
+# 플리마켓 크롤링 프로젝트 필요 패키지
+
+# 웹 크롤링
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+selenium>=4.15.0
+lxml>=4.9.3
+
+# 웹 드라이버 관리
+webdriver-manager>=4.0.0
+
+# 진행률 표시
+tqdm>=4.66.0
+
+# LLM 처리
+openai>=1.0.0
+
+# 환경 변수
+python-dotenv>=1.0.0
+
+# 데이터베이스
+supabase>=2.0.0
+
+# 스케줄링 (선택)
+schedule>=1.2.0
+

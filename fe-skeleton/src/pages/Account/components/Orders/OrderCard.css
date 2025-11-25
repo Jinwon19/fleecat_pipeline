@@ -1,0 +1,139 @@
+/* Order Card Styles */
+.order-card {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.2s ease;
+}
+
+.order-card:hover {
+  border-color: #FF1493;
+  box-shadow: 0 4px 12px rgba(255, 20, 147, 0.1);
+}
+
+/* Order Header */
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.order-date-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.order-date {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #213547;
+}
+
+.order-number {
+  font-size: 0.85rem;
+  color: #8e8e8e;
+}
+
+.order-status-badge {
+  padding: 6px 14px;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+/* Order Content */
+.order-content {
+  margin-bottom: 16px;
+}
+
+.order-product-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.product-name {
+  flex: 1;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #213547;
+}
+
+.order-amount {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #FF1493;
+  white-space: nowrap;
+}
+
+/* Order Footer */
+.order-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-view-detail {
+  padding: 10px 20px;
+  background: #f0f0f0;
+  color: #213547;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.btn-view-detail:hover {
+  background: #FF1493;
+  color: white;
+  border-color: #FF1493;
+  transform: translateY(-1px);
+}
+
+.btn-view-detail:focus {
+  border-color: var(--color-gray-400);
+  outline: none;
+}
+
+.btn-view-detail:active {
+  background: #E6127F;
+  color: white;
+  border-color: #E6127F;
+  transform: scale(0.98);
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .order-card {
+    padding: 16px;
+  }
+
+  .order-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .order-status-badge {
+    align-self: flex-start;
+  }
+
+  .order-product-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .btn-view-detail {
+    width: 100%;
+  }
+}

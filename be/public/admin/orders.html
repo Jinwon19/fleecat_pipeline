@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주문 관리 - Fleecat Admin</title>
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>🔐 Fleecat Admin</h2>
+            </div>
+            <nav>
+                <ul class="sidebar-nav">
+                    <li><a href="dashboard.html">📊 대시보드</a></li>
+                    <li><a href="members.html">👥 회원 관리</a></li>
+                    <li><a href="tenants.html">🏪 판매사 관리</a></li>
+                    <li><a href="tenant-members.html">👔 판매사 구성원 관리</a></li>
+                    <li><a href="categories.html">📂 카테고리 관리</a></li>
+                    <li><a href="products.html">🛍️ 상품 관리</a></li>
+                    <li><a href="orders.html" class="active">📦 주문 관리</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1>주문 관리</h1>
+                <div class="page-actions">
+                    <span id="userEmail"></span>
+                    <button class="btn btn-secondary btn-sm" id="logoutButton">로그아웃</button>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="card mb-20">
+                <div class="card-header">필터</div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                    <div class="form-group">
+                        <label for="filterStatus">주문 상태</label>
+                        <select id="filterStatus" class="form-control">
+                            <option value="">전체</option>
+                            <option value="pending">대기중</option>
+                            <option value="preparing">준비중</option>
+                            <option value="shipped">배송중</option>
+                            <option value="delivered">배송완료</option>
+                            <option value="cancelled">취소</option>
+                            <option value="refunded">환불</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filterPaymentStatus">결제 상태</label>
+                        <select id="filterPaymentStatus" class="form-control">
+                            <option value="">전체</option>
+                            <option value="pending">대기중</option>
+                            <option value="completed">완료</option>
+                            <option value="failed">실패</option>
+                            <option value="cancelled">취소</option>
+                            <option value="refunded">환불</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>&nbsp;</label>
+                        <button class="btn btn-primary btn-block" onclick="loadOrders()">검색</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orders Table -->
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>주문 ID</th>
+                            <th>주문자</th>
+                            <th>총 금액</th>
+                            <th>주문 상태</th>
+                            <th>결제 상태</th>
+                            <th>주문일시</th>
+                            <th>액션</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody">
+                        <tr>
+                            <td colspan="7" class="text-center">데이터를 불러오는 중...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div id="paginationContainer"></div>
+        </main>
+    </div>
+
+    <!-- Order Detail Modal -->
+    <div id="orderDetailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>주문 상세</h2>
+                <button class="modal-close" onclick="closeOrderModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="orderDetailContent">
+                <!-- 주문 상세 정보가 여기에 표시됩니다 -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeOrderModal()">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Status Modal -->
+    <div id="updateStatusModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>주문 상태 변경</h2>
+                <button class="modal-close" onclick="closeUpdateStatusModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="newStatus">새 상태</label>
+                    <select id="newStatus" class="form-control">
+                        <option value="pending">대기중</option>
+                        <option value="preparing">준비중</option>
+                        <option value="shipped">배송중</option>
+                        <option value="delivered">배송완료</option>
+                        <option value="cancelled">취소</option>
+                        <option value="refunded">환불</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeUpdateStatusModal()">취소</button>
+                <button class="btn btn-primary" onclick="confirmUpdateStatus()">변경</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Refund Modal -->
+    <div id="refundModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>환불 처리</h2>
+                <button class="modal-close" onclick="closeRefundModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="refundReason">환불 사유</label>
+                    <textarea id="refundReason" class="form-control" rows="4" placeholder="환불 사유를 입력하세요"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeRefundModal()">취소</button>
+                <button class="btn btn-danger" onclick="confirmRefund()">환불 처리</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/orders.js"></script>
+</body>
+</html>

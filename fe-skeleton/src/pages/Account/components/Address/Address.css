@@ -1,0 +1,116 @@
+/* Address Section Styles */
+.account-section {
+  padding: 24px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #213547;
+  margin: 0;
+}
+
+/* Add Address Button */
+.btn-add-address {
+  padding: 10px 20px;
+  background: #FF1493;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-add-address:hover {
+  background: #E6127F;
+  transform: translateY(-1px);
+}
+
+/* Address List */
+.address-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Empty State */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  color: #8e8e8e;
+}
+
+.empty-state p {
+  margin: 0 0 20px 0;
+  font-size: 1rem;
+}
+
+.btn-primary {
+  padding: 12px 24px;
+  background: #FF1493;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: #E6127F;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 20, 147, 0.3);
+}
+
+/* Loading State */
+.loading-state {
+  text-align: center;
+  padding: 40px;
+  color: #8e8e8e;
+  font-size: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .account-section {
+    padding: 20px;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .btn-add-address {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .account-section {
+    padding: 16px;
+  }
+
+  .empty-state {
+    padding: 40px 16px;
+  }
+
+  .section-title {
+    font-size: 1.25rem;
+  }
+}

@@ -1,0 +1,45 @@
+.welcome-section {
+  background: linear-gradient(135deg, #FFE8D6 0%, #FFEBD9 100%);
+  color: #333;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.welcome-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.welcome-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1rem;
+  opacity: 0.95;
+}
+
+.divider {
+  opacity: 0.6;
+}
+
+@media (max-width: 768px) {
+  .welcome-section {
+    padding: 1.5rem;
+  }
+
+  .welcome-title {
+    font-size: 1.25rem;
+  }
+
+  .user-info {
+    font-size: 0.875rem;
+  }
+}

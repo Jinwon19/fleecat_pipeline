@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fleecat API Tester - Railway 환경</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      font-size: 16px;
+      opacity: 0.9;
+    }
+
+    .config-section {
+      padding: 30px;
+      background: #f8f9fa;
+      border-bottom: 2px solid #e9ecef;
+    }
+
+    .config-section h2 {
+      font-size: 20px;
+      margin-bottom: 20px;
+      color: #495057;
+    }
+
+    .config-group {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 15px;
+      align-items: center;
+    }
+
+    .config-group label {
+      font-weight: 600;
+      min-width: 100px;
+      color: #495057;
+    }
+
+    .config-group input {
+      flex: 1;
+      padding: 12px;
+      border: 2px solid #dee2e6;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border-color 0.3s;
+    }
+
+    .config-group input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .token-display {
+      background: #e7f5ff;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+      border-left: 4px solid #339af0;
+    }
+
+    .token-display strong {
+      color: #1971c2;
+    }
+
+    .token-display code {
+      display: block;
+      margin-top: 8px;
+      padding: 10px;
+      background: white;
+      border-radius: 4px;
+      font-size: 12px;
+      word-break: break-all;
+      color: #495057;
+    }
+
+    .test-sections {
+      padding: 30px;
+    }
+
+    .test-section {
+      margin-bottom: 40px;
+      border: 2px solid #e9ecef;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .test-section-header {
+      background: #495057;
+      color: white;
+      padding: 15px 20px;
+      cursor: pointer;
+      user-select: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .test-section-header:hover {
+      background: #343a40;
+    }
+
+    .test-section-header h3 {
+      font-size: 18px;
+    }
+
+    .test-section-header .badge {
+      background: rgba(255,255,255,0.2);
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+    }
+
+    .test-section-content {
+      padding: 20px;
+      display: none;
+    }
+
+    .test-section.active .test-section-content {
+      display: block;
+    }
+
+    .test-case {
+      margin-bottom: 25px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border-left: 4px solid #adb5bd;
+    }
+
+    .test-case.success {
+      border-left-color: #51cf66;
+    }
+
+    .test-case.error {
+      border-left-color: #ff6b6b;
+    }
+
+    .test-case-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .test-case-title {
+      font-weight: 600;
+      font-size: 16px;
+      color: #212529;
+    }
+
+    .test-case-desc {
+      color: #6c757d;
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+
+    .test-case-body {
+      background: white;
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 15px;
+    }
+
+    .test-case-body pre {
+      margin: 0;
+      font-size: 13px;
+      color: #495057;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-primary {
+      background: #667eea;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #5568d3;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102,126,234,0.4);
+    }
+
+    .btn-success {
+      background: #51cf66;
+      color: white;
+    }
+
+    .btn-danger {
+      background: #ff6b6b;
+      color: white;
+    }
+
+    .response-box {
+      background: #212529;
+      color: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 15px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .response-box pre {
+      margin: 0;
+      font-size: 13px;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .status-200 { background: #d3f9d8; color: #2b8a3e; }
+    .status-201 { background: #d3f9d8; color: #2b8a3e; }
+    .status-400 { background: #ffe3e3; color: #c92a2a; }
+    .status-401 { background: #fff3bf; color: #e67700; }
+    .status-403 { background: #ffe3e3; color: #c92a2a; }
+    .status-404 { background: #ffe3e3; color: #c92a2a; }
+    .status-409 { background: #ffe3e3; color: #c92a2a; }
+
+    .stats {
+      background: #e7f5ff;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: space-around;
+      text-align: center;
+    }
+
+    .stat-item h4 {
+      font-size: 28px;
+      color: #1971c2;
+      margin-bottom: 5px;
+    }
+
+    .stat-item p {
+      color: #495057;
+      font-size: 14px;
+    }
+
+    .footer {
+      background: #f8f9fa;
+      padding: 20px;
+      text-align: center;
+      color: #6c757d;
+      font-size: 14px;
+    }
+
+    @media (max-width: 768px) {
+      .config-group {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .stats {
+        flex-direction: column;
+        gap: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Fleecat API Tester</h1>
+      <p>Phase 2 핵심 API 테스트 (Railway 배포 환경) - 40개 필수 테스트</p>
+    </div>
+
+    <div class="config-section">
+      <h2>설정</h2>
+      <div class="config-group">
+        <label>API Base URL:</label>
+        <input type="text" id="apiUrl" value="https://fleecat-production.up.railway.app/api/v1" placeholder="https://your-api.railway.app/api/v1">
+      </div>
+      <div class="token-display" id="tokenDisplay" style="display: none;">
+        <strong>JWT Token (자동 저장됨)</strong>
+        <code id="tokenValue"></code>
+      </div>
+    </div>
+
+    <div class="test-sections">
+      <div class="stats">
+        <div class="stat-item">
+          <h4 id="totalTests">40</h4>
+          <p>총 테스트</p>
+        </div>
+        <div class="stat-item">
+          <h4 id="passedTests" style="color: #51cf66;">0</h4>
+          <p>성공</p>
+        </div>
+        <div class="stat-item">
+          <h4 id="failedTests" style="color: #ff6b6b;">0</h4>
+          <p>실패</p>
+        </div>
+      </div>
+
+      <!-- Test Section 0: Register & Login -->
+      <div class="test-section active">
+        <div class="test-section-header" onclick="toggleSection(this)">
+          <h3>0. Register & Login (회원가입 & 로그인)</h3>
+          <span class="badge">5개 테스트</span>
+        </div>
+        <div class="test-section-content">
+          <!-- TC-0.1 -->
+          <div class="test-case" id="tc-0-1">
+            <div class="test-case-header">
+              <div class="test-case-title">TC-0.1: 정상 회원가입 ✅</div>
+              <button class="btn btn-primary" onclick="runTest('0-1')">실행</button>
+            </div>
+            <div class="test-case-desc">신규 회원 등록 및 JWT 토큰 발급</div>
+            <div class="test-case-body">
+              <strong>Email:</strong> <input type="text" id="reg-email" value="testuser@example.com" style="width: 100%; padding: 8px; margin: 5px 0;">
+              <strong>Password:</strong> <input type="password" id="reg-password" value="Test1234!" style="width: 100%; padding: 8px; margin: 5px 0;">
+              <strong>Name:</strong> <input type="text" id="reg-name" value="테스트유저" style="width: 100%; padding: 8px; margin: 5px 0;">
+              <strong>Nickname:</strong> <input type="text" id="reg-nickname" value="테스터" style="width: 100%; padding: 8px; margin: 5px 0;">
+            </div>
+            <div class="response-box" id="response-0-1" style="display: none;"></div>
+          </div>
+
+          <!-- TC-0.2 -->
+          <div class="test-case" id="tc-0-2">
+            <div class="test-case-header">
+              <div class="test-case-title">TC-0.2: 정상 로그인 ✅</div>
+              <button class="btn btn-primary" onclick="runTest('0-2')">실행</button>
+            </div>
+            <div class="test-case-desc">이메일/비밀번호로 JWT 토큰 발급</div>
+            <div class="test-case-body">
+              <strong>Email:</strong> <input type="text" id="login-email" value="testuser@example.com" style="width: 100%; padding: 8px; margin: 5px 0;">
+              <strong>Password:</strong> <input type="password" id="login-password" value="Test1234!" style="width: 100%; padding: 8px; margin: 5px 0;">
+            </div>
+            <div class="response-box" id="response-0-2" style="display: none;"></div>
+          </div>
+
+          <!-- TC-0.3 -->
+          <div class="test-case" id="tc-0-3">
+            <div class="test-case-header">
+              <div class="test-case-title">TC-0.3: 회원가입 - 필수 필드 누락 ❌</div>
+              <button class="btn btn-primary" onclick="runTest('0-3')">실행</button>
+            </div>
+            <div class="test-case-desc">email 필드 없이 회원가입 시도 (400 Expected)</div>
+            <div class="response-box" id="response-0-3" style="display: none;"></div>
+          </div>
+
+          <!-- TC-0.4 -->
+          <div class="test-case" id="tc-0-4">
+            <div class="test-case-header">
+              <div class="test-case-title">TC-0.4: 로그인 - 잘못된 비밀번호 ❌</div>
+              <button class="btn btn-primary" onclick="runTest('0-4')">실행</button>
+            </div>
+            <div class="test-case-desc">틀린 비밀번호로 로그인 시도 (401 Expected)</div>
+            <div class="response-box" id="response-0-4" style="display: none;"></div>
+          </div>
+
+          <!-- TC-0.5 -->
+          <div class="test-case" id="tc-0-5">
+            <div class="test-case-header">
+              <div class="test-case-title">TC-0.5: 로그인 - 존재하지 않는 이메일 ❌</div>
+              <button class="btn btn-primary" onclick="runTest('0-5')">실행</button>
+            </div>
+            <div class="test-case-desc">존재하지 않는 이메일로 로그인 시도 (401 Expected)</div>
+            <div class="response-box" id="response-0-5" style="display: none;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Test Section 1: Tenant Registration -->
+      <div class="test-section">
+        <div class="test-section-header" onclick="toggleSection(this)">
+          <h3>1. Tenant Registration (판매사 등록)</h3>
+          <span class="badge">7개 테스트</span>
+        </div>
+        <div class="test-section-content">
+          <p style="background: #fff3bf; padding: 15px; border-radius: 8px; margin-bottom: 20px; color: #856404;">
+            ⚠️ 이 테스트를 실행하기 전에 먼저 <strong>Step 0 (로그인)</strong>을 완료하여 JWT 토큰을 발급받아야 합니다.
+          </p>
+
+          <!-- TC-1.1 -->
+          <div class="test-case" id="tc-1-1">
+            <div class="test-case-header">
+              <div class="test-case-title">TC-1.1: 정상 판매사 등록 ✅</div>
+              <button class="btn btn-primary" onclick="runTest('1-1')">실행</button>
+            </div>
+            <div class="test-case-desc">인증된 회원이 판매사 등록</div>
+            <div class="test-case-body">
+              <textarea id="tenant-data" style="width: 100%; height: 150px; padding: 10px; font-family: monospace; font-size: 13px; border: 2px solid #dee2e6; border-radius: 6px;">
+{
+  "tenant_name": "플리캣공방",
+  "tenant_detail_phone": "010-1234-5678",
+  "tenant_detail_email": "fleecat@example.com",
+  "tenant_detail_address": "서울시 강남구 테헤란로 123",
+  "tenant_detail_zip_code": "06141"
+}</textarea>
+            </div>
+            <div class="response-box" id="response-1-1" style="display: none;"></div>
+          </div>
+
+          <!-- TC-1.2 to 1.7 -->
+          <div class="test-case" id="tc-1-2">
+            <div class="test-case-header">
+              <div class="test-case-title">TC-1.2: 인증 없이 등록 시도 ❌</div>
+              <button class="btn btn-primary" onclick="runTest('1-2')">실행</button>
+            </div>
+            <div class="test-case-desc">Authorization header 없이 요청 (401 Expected)</div>
+            <div class="response-box" id="response-1-2" style="display: none;"></div>
+          </div>
+
+          <div class="test-case" id="tc-1-3">
+            <div class="test-case-header">
+              <div class="test-case-title">TC-1.3: 필수 필드 누락 - tenant_name ❌</div>
+              <button class="btn btn-primary" onclick="runTest('1-3')">실행</button>
+            </div>
+            <div class="test-case-desc">tenant_name 없이 요청 (400 Expected)</div>
+            <div class="response-box" id="response-1-3" style="display: none;"></div>
+          </div>
+
+          <div class="test-case" id="tc-1-4">
+            <div class="test-case-header">
+              <div class="test-case-title">TC-1.4: 필수 필드 누락 - phone ❌</div>
+              <button class="btn btn-primary" onclick="runTest('1-4')">실행</button>
+            </div>
+            <div class="test-case-desc">tenant_detail_phone 없이 요청 (400 Expected)</div>
+            <div class="response-box" id="response-1-4" style="display: none;"></div>
+          </div>
+
+          <div class="test-case" id="tc-1-5">
+            <div class="test-case-header">
+              <div class="test-case-title">TC-1.5: 중복된 tenant_name ❌</div>
+              <button class="btn btn-primary" onclick="runTest('1-5')">실행</button>
+            </div>
+            <div class="test-case-desc">이미 존재하는 판매사명으로 등록 시도 (409 Expected)</div>
+            <div class="response-box" id="response-1-5" style="display: none;"></div>
+          </div>
+
+          <div class="test-case" id="tc-1-6">
+            <div class="test-case-header">
+              <div class="test-case-title">TC-1.6: 잘못된 전화번호 형식 ❌</div>
+              <button class="btn btn-primary" onclick="runTest('1-6')">실행</button>
+            </div>
+            <div class="test-case-desc">잘못된 형식의 전화번호 (400 Expected)</div>
+            <div class="response-box" id="response-1-6" style="display: none;"></div>
+          </div>
+
+          <div class="test-case" id="tc-1-7">
+            <div class="test-case-header">
+              <div class="test-case-title">TC-1.7: 잘못된 이메일 형식 ❌</div>
+              <button class="btn btn-primary" onclick="runTest('1-7')">실행</button>
+            </div>
+            <div class="test-case-desc">잘못된 형식의 이메일 (400 Expected)</div>
+            <div class="response-box" id="response-1-7" style="display: none;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Test Section 2: TenantMember Application -->
+      <div class="test-section">
+        <div class="test-section-header" onclick="toggleSection(this)">
+          <h3>2. TenantMember Application (판매사 구성원 가입 신청)</h3>
+          <span class="badge">3개 테스트</span>
+        </div>
+        <div class="test-section-content">
+          <p style="background: #fff3bf; padding: 15px; border-radius: 8px; margin-bottom: 20px; color: #856404;">
+            ⚠️ 먼저 <strong>Step 1 (Tenant Registration)</strong>을 완료하여 tenant_id를 획득해야 합니다.
+          </p>
+
+          <!-- TC-2.1 -->
+          <div class="test-case" id="tc-2-1">
+            <div class="test-case-header">
+              <div class="test-case-title">TC-2.1: 정상 가입 신청 ✅</div>
+              <button class="btn btn-primary" onclick="runTest('2-1')">실행</button>
+            </div>
+            <div class="test-case-desc">일반 회원이 판매사에 가입 신청 (pending 상태)</div>
+            <div class="test-case-body">
+              <strong>Tenant ID:</strong> <input type="number" id="tenant-id" value="1" style="width: 100%; padding: 8px; margin: 5px 0;">
+              <strong>Role:</strong>
+              <select id="tenant-member-role" style="width: 100%; padding: 8px; margin: 5px 0;">
+                <option value="member">member (일반 구성원)</option>
+                <option value="owner">owner (소유자)</option>
+              </select>
+            </div>
+            <div class="response-box" id="response-2-1" style="display: none;"></div>
+          </div>
+
+          <!-- TC-2.2 -->
+          <div class="test-case" id="tc-2-2">
+            <div class="test-case-header">
+              <div class="test-case-title">TC-2.2: 인증 없이 가입 신청 ❌</div>
+              <button class="btn btn-primary" onclick="runTest('2-2')">실행</button>
+            </div>
+            <div class="test-case-desc">Authorization header 없이 요청 (401 Expected)</div>
+            <div class="response-box" id="response-2-2" style="display: none;"></div>
+          </div>
+
+          <!-- TC-2.3 -->
+          <div class="test-case" id="tc-2-3">
+            <div class="test-case-header">
+              <div class="test-case-title">TC-2.3: 필수 필드 누락 - role ❌</div>
+              <button class="btn btn-primary" onclick="runTest('2-3')">실행</button>
+            </div>
+            <div class="test-case-desc">tenant_member_role 없이 요청 (400 Expected)</div>
+            <div class="response-box" id="response-2-3" style="display: none;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Test Section 4: Product Creation -->
+      <div class="test-section">
+        <div class="test-section-header" onclick="toggleSection(this)">
+          <h3>4. Product Creation (상품 등록)</h3>
+          <span class="badge">4개 테스트</span>
+        </div>
+        <div class="test-section-content">
+          <p style="background: #fff3bf; padding: 15px; border-radius: 8px; margin-bottom: 20px; color: #856404;">
+            ⚠️ 승인된 TenantMember만 상품을 등록할 수 있습니다. Supabase에서 수동으로 tenant_member_approval_status를 'approved'로 변경해야 합니다.
+          </p>
+
+          <!-- TC-4.1 -->
+          <div class="test-case" id="tc-4-1">
+            <div class="test-case-header">
+              <div class="test-case-title">TC-4.1: 정상 상품 등록 ✅</div>
+              <button class="btn btn-primary" onclick="runTest('4-1')">실행</button>
+            </div>
+            <div class="test-case-desc">승인된 TenantMember가 상품 등록</div>
+            <div class="test-case-body">
+              <textarea id="product-data" style="width: 100%; height: 200px; padding: 10px; font-family: monospace; font-size: 13px; border: 2px solid #dee2e6; border-radius: 6px;">
+{
+  "tenant_member_id": 1,
+  "category_id": 1,
+  "product_name": "수제 가죽 지갑",
+  "product_price": 45000,
+  "product_stock": 10,
+  "product_description": "소가죽 100% 수제 장지갑"
+}</textarea>
+            </div>
+            <div class="response-box" id="response-4-1" style="display: none;"></div>
+          </div>
+
+          <!-- TC-4.2 -->
+          <div class="test-case" id="tc-4-2">
+            <div class="test-case-header">
+              <div class="test-case-title">TC-4.2: 인증 없이 등록 시도 ❌</div>
+              <button class="btn btn-primary" onclick="runTest('4-2')">실행</button>
+            </div>
+            <div class="test-case-desc">Authorization header 없이 요청 (401 Expected)</div>
+            <div class="response-box" id="response-4-2" style="display: none;"></div>
+          </div>
+
+          <!-- TC-4.3 -->
+          <div class="test-case" id="tc-4-3">
+            <div class="test-case-header">
+              <div class="test-case-title">TC-4.3: 필수 필드 누락 - product_name ❌</div>
+              <button class="btn btn-primary" onclick="runTest('4-3')">실행</button>
+            </div>
+            <div class="test-case-desc">product_name 없이 요청 (400 Expected)</div>
+            <div class="response-box" id="response-4-3" style="display: none;"></div>
+          </div>
+
+          <!-- TC-4.4 -->
+          <div class="test-case" id="tc-4-4">
+            <div class="test-case-header">
+              <div class="test-case-title">TC-4.4: 필수 필드 누락 - product_price ❌</div>
+              <button class="btn btn-primary" onclick="runTest('4-4')">실행</button>
+            </div>
+            <div class="test-case-desc">product_price 없이 요청 (400 Expected)</div>
+            <div class="response-box" id="response-4-4" style="display: none;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 간단 안내 메시지 -->
+      <div style="background: #e7f5ff; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #339af0;">
+        <strong>📝 구현된 테스트 섹션:</strong>
+        <p style="margin-top: 10px; color: #495057;">
+          - <strong>Step 0</strong>: Register & Login (5개)<br>
+          - <strong>Step 1</strong>: Tenant Registration (7개)<br>
+          - <strong>Step 2</strong>: TenantMember Application (3개)<br>
+          - <strong>Step 4</strong>: Product Creation (4개)
+        </p>
+        <p style="margin-top: 10px; color: #495057;">
+          Category Creation (Step 3)은 Admin 권한이 필요하므로 별도로 테스트하세요.
+        </p>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>Fleecat Backend API Testing Tool | Railway 배포 환경</p>
+      <p>테스트 문서: <code>md/step2/2-21_critical_api_test_plan.md</code></p>
+    </div>
+  </div>
+
+  <script>
+    // Global state
+    let apiBaseUrl = document.getElementById('apiUrl').value;
+    let jwtToken = localStorage.getItem('jwt_token') || '';
+    let testResults = { passed: 0, failed: 0 };
+
+    // Initialize
+    window.addEventListener('DOMContentLoaded', () => {
+      if (jwtToken) {
+        displayToken(jwtToken);
+      }
+    });
+
+    // API URL 변경 감지
+    document.getElementById('apiUrl').addEventListener('change', (e) => {
+      apiBaseUrl = e.target.value;
+    });
+
+    // 섹션 토글
+    function toggleSection(header) {
+      const section = header.parentElement;
+      section.classList.toggle('active');
+    }
+
+    // 토큰 표시
+    function displayToken(token) {
+      jwtToken = token;
+      localStorage.setItem('jwt_token', token);
+      document.getElementById('tokenDisplay').style.display = 'block';
+      document.getElementById('tokenValue').textContent = token;
+    }
+
+    // 테스트 결과 업데이트
+    function updateStats(passed) {
+      if (passed) {
+        testResults.passed++;
+      } else {
+        testResults.failed++;
+      }
+      document.getElementById('passedTests').textContent = testResults.passed;
+      document.getElementById('failedTests').textContent = testResults.failed;
+    }
+
+    // 응답 표시
+    function displayResponse(testId, status, data, passed) {
+      const responseBox = document.getElementById(`response-${testId}`);
+      const testCase = document.getElementById(`tc-${testId}`);
+
+      responseBox.style.display = 'block';
+      responseBox.innerHTML = `
+        <strong>Status: <span class="status-badge status-${status}">${status}</span></strong>
+        <pre>${JSON.stringify(data, null, 2)}</pre>
+      `;
+
+      if (passed) {
+        testCase.classList.add('success');
+        testCase.classList.remove('error');
+      } else {
+        testCase.classList.add('error');
+        testCase.classList.remove('success');
+      }
+
+      updateStats(passed);
+    }
+
+    // API 요청 헬퍼
+    async function apiRequest(method, endpoint, body = null, includeAuth = true) {
+      const headers = {
+        'Content-Type': 'application/json'
+      };
+
+      if (includeAuth && jwtToken) {
+        headers['Authorization'] = `Bearer ${jwtToken}`;
+      }
+
+      const options = {
+        method,
+        headers
+      };
+
+      if (body) {
+        options.body = JSON.stringify(body);
+      }
+
+      try {
+        const response = await fetch(`${apiBaseUrl}${endpoint}`, options);
+        const data = await response.json();
+        return { status: response.status, data };
+      } catch (error) {
+        return { status: 'ERROR', data: { error: error.message } };
+      }
+    }
+
+    // 테스트 실행
+    async function runTest(testId) {
+      const [section, caseNum] = testId.split('-');
+
+      // Section 0: Register & Login
+      if (section === '0') {
+        if (caseNum === '1') {
+          // TC-0.1: 정상 회원가입
+          const email = document.getElementById('reg-email').value;
+          const password = document.getElementById('reg-password').value;
+          const name = document.getElementById('reg-name').value;
+          const nickname = document.getElementById('reg-nickname').value;
+
+          const body = { email, password, name, nickname, phone: '010-1234-5678' };
+          const result = await apiRequest('POST', '/auth/register', body, false);
+
+          const passed = result.status === 201 && result.data.success;
+          displayResponse(testId, result.status, result.data, passed);
+
+          if (passed && result.data.data.token) {
+            displayToken(result.data.data.token);
+          }
+        }
+        else if (caseNum === '2') {
+          // TC-0.2: 정상 로그인
+          const email = document.getElementById('login-email').value;
+          const password = document.getElementById('login-password').value;
+
+          const body = { email, password };
+          const result = await apiRequest('POST', '/auth/login', body, false);
+
+          const passed = result.status === 200 && result.data.success;
+          displayResponse(testId, result.status, result.data, passed);
+
+          if (passed && result.data.data.token) {
+            displayToken(result.data.data.token);
+          }
+        }
+        else if (caseNum === '3') {
+          // TC-0.3: 필수 필드 누락 (email)
+          const body = { password: 'Test1234!', name: '테스트', nickname: '테스터' };
+          const result = await apiRequest('POST', '/auth/register', body, false);
+
+          const passed = result.status === 400;
+          displayResponse(testId, result.status, result.data, passed);
+        }
+        else if (caseNum === '4') {
+          // TC-0.4: 잘못된 비밀번호
+          const email = document.getElementById('login-email').value;
+          const body = { email, password: 'WrongPassword123!' };
+          const result = await apiRequest('POST', '/auth/login', body, false);
+
+          const passed = result.status === 401;
+          displayResponse(testId, result.status, result.data, passed);
+        }
+        else if (caseNum === '5') {
+          // TC-0.5: 존재하지 않는 이메일
+          const body = { email: 'nonexistent@example.com', password: 'Test1234!' };
+          const result = await apiRequest('POST', '/auth/login', body, false);
+
+          const passed = result.status === 401;
+          displayResponse(testId, result.status, result.data, passed);
+        }
+      }
+
+      // Section 1: Tenant Registration
+      if (section === '1') {
+        if (caseNum === '1') {
+          // TC-1.1: 정상 판매사 등록
+          try {
+            const body = JSON.parse(document.getElementById('tenant-data').value);
+            const result = await apiRequest('POST', '/tenants', body, true);
+
+            const passed = result.status === 201 && result.data.success;
+            displayResponse(testId, result.status, result.data, passed);
+          } catch (e) {
+            displayResponse(testId, 'ERROR', { error: 'Invalid JSON' }, false);
+          }
+        }
+        else if (caseNum === '2') {
+          // TC-1.2: 인증 없이 등록
+          const body = JSON.parse(document.getElementById('tenant-data').value);
+          const result = await apiRequest('POST', '/tenants', body, false);
+
+          const passed = result.status === 401;
+          displayResponse(testId, result.status, result.data, passed);
+        }
+        else if (caseNum === '3') {
+          // TC-1.3: tenant_name 누락
+          const body = {
+            "tenant_detail_phone": "010-1234-5678",
+            "tenant_detail_email": "fleecat@example.com",
+            "tenant_detail_address": "서울시 강남구",
+            "tenant_detail_zip_code": "06141"
+          };
+          const result = await apiRequest('POST', '/tenants', body, true);
+
+          const passed = result.status === 400;
+          displayResponse(testId, result.status, result.data, passed);
+        }
+        else if (caseNum === '4') {
+          // TC-1.4: phone 누락
+          const body = {
+            "tenant_name": "플리캣공방",
+            "tenant_detail_email": "fleecat@example.com",
+            "tenant_detail_address": "서울시 강남구",
+            "tenant_detail_zip_code": "06141"
+          };
+          const result = await apiRequest('POST', '/tenants', body, true);
+
+          const passed = result.status === 400;
+          displayResponse(testId, result.status, result.data, passed);
+        }
+        else if (caseNum === '5') {
+          // TC-1.5: 중복된 tenant_name
+          const body = {
+            "tenant_name": "플리캣공방",
+            "tenant_detail_phone": "010-1234-5678",
+            "tenant_detail_email": "another@example.com",
+            "tenant_detail_address": "서울시 강남구",
+            "tenant_detail_zip_code": "06141"
+          };
+          const result = await apiRequest('POST', '/tenants', body, true);
+
+          const passed = result.status === 409;
+          displayResponse(testId, result.status, result.data, passed);
+        }
+        else if (caseNum === '6') {
+          // TC-1.6: 잘못된 전화번호
+          const body = {
+            "tenant_name": "플리캣공방2",
+            "tenant_detail_phone": "123456",
+            "tenant_detail_email": "fleecat2@example.com",
+            "tenant_detail_address": "서울시 강남구",
+            "tenant_detail_zip_code": "06141"
+          };
+          const result = await apiRequest('POST', '/tenants', body, true);
+
+          const passed = result.status === 400;
+          displayResponse(testId, result.status, result.data, passed);
+        }
+        else if (caseNum === '7') {
+          // TC-1.7: 잘못된 이메일
+          const body = {
+            "tenant_name": "플리캣공방3",
+            "tenant_detail_phone": "010-1234-5678",
+            "tenant_detail_email": "invalid-email",
+            "tenant_detail_address": "서울시 강남구",
+            "tenant_detail_zip_code": "06141"
+          };
+          const result = await apiRequest('POST', '/tenants', body, true);
+
+          const passed = result.status === 400;
+          displayResponse(testId, result.status, result.data, passed);
+        }
+      }
+
+      // Section 2: TenantMember Application
+      if (section === '2') {
+        if (caseNum === '1') {
+          // TC-2.1: 정상 가입 신청
+          const tenantId = document.getElementById('tenant-id').value;
+          const role = document.getElementById('tenant-member-role').value;
+
+          const body = {
+            tenant_member_role: role
+          };
+          const result = await apiRequest('POST', `/tenants/${tenantId}/members`, body, true);
+
+          const passed = result.status === 201 && result.data.success;
+          displayResponse(testId, result.status, result.data, passed);
+        }
+        else if (caseNum === '2') {
+          // TC-2.2: 인증 없이 가입 신청
+          const tenantId = document.getElementById('tenant-id').value;
+          const body = {
+            tenant_member_role: 'member'
+          };
+          const result = await apiRequest('POST', `/tenants/${tenantId}/members`, body, false);
+
+          const passed = result.status === 401;
+          displayResponse(testId, result.status, result.data, passed);
+        }
+        else if (caseNum === '3') {
+          // TC-2.3: 필수 필드 누락 - role
+          const tenantId = document.getElementById('tenant-id').value;
+          const body = {
+            // tenant_member_role 없이 요청
+          };
+          const result = await apiRequest('POST', `/tenants/${tenantId}/members`, body, true);
+
+          const passed = result.status === 400;
+          displayResponse(testId, result.status, result.data, passed);
+        }
+      }
+
+      // Section 4: Product Creation
+      if (section === '4') {
+        if (caseNum === '1') {
+          // TC-4.1: 정상 상품 등록
+          try {
+            const body = JSON.parse(document.getElementById('product-data').value);
+            const result = await apiRequest('POST', '/products', body, true);
+
+            const passed = result.status === 201 && result.data.success;
+            displayResponse(testId, result.status, result.data, passed);
+          } catch (e) {
+            displayResponse(testId, 'ERROR', { error: 'Invalid JSON' }, false);
+          }
+        }
+        else if (caseNum === '2') {
+          // TC-4.2: 인증 없이 등록
+          const body = JSON.parse(document.getElementById('product-data').value);
+          const result = await apiRequest('POST', '/products', body, false);
+
+          const passed = result.status === 401;
+          displayResponse(testId, result.status, result.data, passed);
+        }
+        else if (caseNum === '3') {
+          // TC-4.3: product_name 누락
+          const body = {
+            "tenant_member_id": 1,
+            "category_id": 1,
+            "product_price": 45000,
+            "product_stock": 10
+          };
+          const result = await apiRequest('POST', '/products', body, true);
+
+          const passed = result.status === 400;
+          displayResponse(testId, result.status, result.data, passed);
+        }
+        else if (caseNum === '4') {
+          // TC-4.4: product_price 누락
+          const body = {
+            "tenant_member_id": 1,
+            "category_id": 1,
+            "product_name": "수제 가죽 지갑",
+            "product_stock": 10
+          };
+          const result = await apiRequest('POST', '/products', body, true);
+
+          const passed = result.status === 400;
+          displayResponse(testId, result.status, result.data, passed);
+        }
+      }
+
+      // Section 3, 5는 아직 미구현
+      if (section === '3' || section === '5') {
+        alert(`테스트 섹션 ${section}은 아직 구현되지 않았습니다.`);
+      }
+    }
+  </script>
+</body>
+</html>

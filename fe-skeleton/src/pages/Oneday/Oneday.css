@@ -1,0 +1,23 @@
+.oneday-page {
+  min-height: 60vh;
+  padding: 40px 20px;
+}
+
+.oneday-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.oneday-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-primary, #333);
+  margin-bottom: 16px;
+}
+
+.oneday-description {
+  font-size: 1.125rem;
+  color: var(--color-text-secondary, #666);
+  line-height: 1.6;
+}

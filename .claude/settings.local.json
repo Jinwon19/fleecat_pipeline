@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s -H \"Authorization: KakaoAK $KAKAO_REST_API_KEY\" \"https://dapi.kakao.com/v2/local/search/keyword.json?query=대추초롱\")",
+      "Bash(node -e \"const data=JSON.parse(require(''''fs'''').readFileSync(0,''''utf-8'''')); console.log(JSON.stringify(data.documents.slice(0,3), null, 2));\")",
+      "WebSearch",
+      "Bash(python:*)",
+      "Bash(node:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(nul)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

@@ -1,0 +1,43 @@
+/* Loading State Component */
+.loading-state {
+  padding: 24px;
+  text-align: center;
+  color: #666;
+}
+
+.loading-state__text {
+  margin: 0;
+  font-size: 16px;
+}
+
+.loading-state--compact {
+  padding: 20px;
+}
+
+/* Loading spinner */
+.loading-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #333;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .loading-state {
+    padding: 16px;
+  }
+
+  .loading-state__text {
+    font-size: 14px;
+  }
+}

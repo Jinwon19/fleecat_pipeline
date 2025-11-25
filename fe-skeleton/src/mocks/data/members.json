@@ -1,0 +1,38 @@
+{
+  "members": [
+    {
+      "member_id": 1,
+      "company_id": null,
+      "member_email": "buyer@fleecat.com",
+      "member_password": null,
+      "member_name": "홍길동",
+      "member_nickname": "구매왕",
+      "member_phone": "010-1234-5678",
+      "member_account_type": "individual",
+      "member_account_role": "buyer",
+      "member_status": "active",
+      "member_marketing_email": true,
+      "member_marketing_sms": false,
+      "member_last_login_at": "2025-10-08T10:00:00Z",
+      "member_created_at": "2025-09-01T00:00:00Z",
+      "member_updated_at": "2025-10-08T10:00:00Z"
+    },
+    {
+      "member_id": 2,
+      "company_id": null,
+      "member_email": "buyer2@fleecat.com",
+      "member_password": null,
+      "member_name": "김철수",
+      "member_nickname": "쇼핑러버",
+      "member_phone": "010-2345-6789",
+      "member_account_type": "individual",
+      "member_account_role": "buyer",
+      "member_status": "active",
+      "member_marketing_email": false,
+      "member_marketing_sms": true,
+      "member_last_login_at": "2025-10-07T15:30:00Z",
+      "member_created_at": "2025-09-15T00:00:00Z",
+      "member_updated_at": "2025-10-07T15:30:00Z"
+    }
+  ]
+}

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상품 관리 - Fleecat Admin</title>
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>🔐 Fleecat Admin</h2>
+            </div>
+            <nav>
+                <ul class="sidebar-nav">
+                    <li><a href="dashboard.html">📊 대시보드</a></li>
+                    <li><a href="members.html">👥 회원 관리</a></li>
+                    <li><a href="tenants.html">🏪 판매사 관리</a></li>
+                    <li><a href="tenant-members.html">👔 판매사 구성원 관리</a></li>
+                    <li><a href="categories.html">📂 카테고리 관리</a></li>
+                    <li><a href="products.html" class="active">🛍️ 상품 관리</a></li>
+                    <li><a href="orders.html">📦 주문 관리</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1>상품 관리</h1>
+                <div class="page-actions">
+                    <span id="userEmail"></span>
+                    <button class="btn btn-secondary btn-sm" id="logoutButton">로그아웃</button>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="card mb-20">
+                <div class="card-header">필터</div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                    <div class="form-group">
+                        <label for="filterStatus">상품 상태</label>
+                        <select id="filterStatus" class="form-control">
+                            <option value="">전체</option>
+                            <option value="active">판매중</option>
+                            <option value="sold_out">품절</option>
+                            <option value="inactive">판매중지</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filterSearch">검색</label>
+                        <input type="text" id="filterSearch" class="form-control" placeholder="상품명 검색">
+                    </div>
+                    <div class="form-group">
+                        <label>&nbsp;</label>
+                        <button class="btn btn-primary btn-block" onclick="loadProducts()">검색</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Table -->
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>상품 ID</th>
+                            <th>상품명</th>
+                            <th>가격</th>
+                            <th>재고</th>
+                            <th>상태</th>
+                            <th>등록일</th>
+                            <th>액션</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsTableBody">
+                        <tr>
+                            <td colspan="7" class="text-center">데이터를 불러오는 중...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div id="paginationContainer"></div>
+        </main>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div id="productDetailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>상품 상세</h2>
+                <button class="modal-close" onclick="closeProductModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="productDetailContent">
+                <!-- 상품 상세 정보가 여기에 표시됩니다 -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeProductModal()">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Status Modal -->
+    <div id="updateStatusModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>상품 상태 변경</h2>
+                <button class="modal-close" onclick="closeUpdateStatusModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="newStatus">새 상태</label>
+                    <select id="newStatus" class="form-control">
+                        <option value="active">판매중</option>
+                        <option value="sold_out">품절</option>
+                        <option value="inactive">판매중지</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeUpdateStatusModal()">취소</button>
+                <button class="btn btn-primary" onclick="confirmUpdateStatus()">변경</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/products.js"></script>
+</body>
+</html>

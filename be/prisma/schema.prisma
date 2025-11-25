@@ -1,0 +1,422 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Company {
+  company_id              BigInt    @id @default(autoincrement())
+  company_name            String    @unique @db.VarChar(100)
+  company_business_number String    @unique @db.VarChar(10)
+  company_business_type   String?   @db.VarChar(50)
+  company_business_item   String?   @db.VarChar(50)
+  company_ceo_name        String    @db.VarChar(30)
+  company_ceo_phone       String?   @db.VarChar(15)
+  company_ceo_email       String?   @db.VarChar(100)
+  company_phone           String    @db.VarChar(15)
+  company_email           String?   @db.VarChar(100)
+  company_zipcode         String    @db.VarChar(10)
+  company_address         String    @db.VarChar(200)
+  company_address_detail  String?   @db.VarChar(100)
+  company_status          String    @default("pending") @db.VarChar(20)
+  company_approval_memo   String?
+  company_applied_at      DateTime  @default(now())
+  company_approved_at     DateTime?
+  company_updated_at      DateTime  @default(now()) @updatedAt
+  members                 Member[]
+
+  @@index([company_status])
+  @@map("company")
+}
+
+model Member {
+  member_id              BigInt              @id @default(autoincrement())
+  company_id             BigInt?
+  member_email           String              @unique @db.VarChar(100)
+  member_password        String?             @db.VarChar(255)
+  member_name            String              @db.VarChar(30)
+  member_nickname        String              @unique @db.VarChar(30)
+  member_phone           String?             @db.VarChar(15)
+  member_account_type    String              @default("individual") @db.VarChar(20)
+  member_account_role    String              @default("buyer") @db.VarChar(20)
+  member_status          String              @default("active") @db.VarChar(20)
+  member_marketing_email Boolean             @default(false)
+  member_marketing_sms   Boolean             @default(false)
+  member_last_login_at   DateTime?
+  member_auth_id         String?             @unique @db.VarChar(255)
+  member_auth_provider   String?             @db.VarChar(20)
+  member_created_at      DateTime            @default(now())
+  member_updated_at      DateTime            @default(now()) @updatedAt
+  coupons                Coupon[]
+  company                Company?            @relation(fields: [company_id], references: [company_id])
+  member_addresses       MemberAddress[]
+  member_permissions     MemberPermission?
+  member_transactions    MemberTransaction[]
+  orders                 Order[]
+  shopping_carts         ShoppingCart[]
+  tenant_members         TenantMember[]
+
+  @@index([company_id])
+  @@index([member_email])
+  @@index([member_account_role])
+  @@index([member_status])
+  @@index([member_auth_id])
+  @@index([member_auth_provider])
+  @@map("member")
+}
+
+model MemberAddress {
+  member_address_id           BigInt    @id @default(autoincrement())
+  member_id                   BigInt
+  member_address_alias        String    @db.VarChar(30)
+  member_address_is_default   Boolean   @default(false)
+  member_address_recipient    String    @db.VarChar(30)
+  member_address_phone        String    @db.VarChar(15)
+  member_address_zipcode      String    @db.VarChar(10)
+  member_address_address1     String    @db.VarChar(100)
+  member_address_address2     String?   @db.VarChar(100)
+  member_address_last_used_at DateTime?
+  member_address_status       String    @default("active") @db.VarChar(20)
+  member_address_created_at   DateTime  @default(now())
+  member_address_updated_at   DateTime  @default(now()) @updatedAt
+  member                      Member    @relation(fields: [member_id], references: [member_id], onDelete: Cascade)
+
+  @@index([member_id])
+  @@index([member_id, member_address_status])
+  @@index([member_id, member_address_is_default])
+  @@index([member_id, member_address_last_used_at])
+  @@map("member_address")
+}
+
+model MemberPermission {
+  member_permission_id         BigInt   @id @default(autoincrement())
+  member_id                    BigInt   @unique
+  member_permission_role       Int      @default(1)
+  can_purchase                 Boolean  @default(true)
+  can_board_write              Boolean  @default(true)
+  is_account_active            Boolean  @default(true)
+  can_sell                     Boolean  @default(false)
+  can_product_manage           Boolean  @default(false)
+  can_order_manage             Boolean  @default(false)
+  can_payment_manage           Boolean  @default(false)
+  can_member_manage            Boolean  @default(false)
+  can_board_moderate           Boolean  @default(false)
+  can_review_manage            Boolean  @default(false)
+  can_promotion_manage         Boolean  @default(false)
+  can_statistics_view          Boolean  @default(false)
+  can_system_config            Boolean  @default(false)
+  can_inquiry_view             Boolean  @default(false)
+  can_inquiry_reply            Boolean  @default(false)
+  is_restricted                Boolean  @default(false)
+  is_seller_approved           Boolean  @default(false)
+  member_permission_created_at DateTime @default(now())
+  member_permission_updated_at DateTime @default(now()) @updatedAt
+  member                       Member   @relation(fields: [member_id], references: [member_id], onDelete: Cascade)
+
+  @@index([member_id])
+  @@index([member_permission_role])
+  @@index([is_account_active])
+  @@index([member_id, can_purchase, is_account_active])
+  @@index([member_id, can_sell, is_seller_approved])
+  @@index([member_id, can_member_manage, can_system_config])
+  @@map("member_permissions")
+}
+
+model MemberTransaction {
+  member_transaction_id  BigInt   @id @default(autoincrement())
+  member_id              BigInt
+  transaction_type       String   @db.VarChar(20)
+  transaction_amount     Decimal  @db.Decimal(15, 2)
+  transaction_title      String   @db.VarChar(100)
+  payment_method         String?  @db.VarChar(30)
+  related_order_id       BigInt?
+  transaction_date       DateTime @db.Date
+  transaction_created_at DateTime @default(now())
+  member                 Member   @relation(fields: [member_id], references: [member_id], onDelete: Cascade)
+  order                  Order?   @relation(fields: [related_order_id], references: [order_id])
+
+  @@index([member_id])
+  @@index([transaction_date(sort: Desc)])
+  @@index([member_id, transaction_type])
+  @@index([related_order_id])
+  @@map("member_transactions")
+}
+
+model Tenant {
+  tenant_id              BigInt         @id @default(autoincrement())
+  tenant_name            String         @unique @db.VarChar(50)
+  tenant_status          String         @default("pending") @db.VarChar(20)
+  tenant_approval_member String?
+  tenant_applied_at      DateTime       @default(now())
+  tenant_approved_at     DateTime?
+  tenant_updated_at      DateTime       @default(now()) @updatedAt
+  tenant_detail          TenantDetail?
+  tenant_members         TenantMember[]
+
+  @@index([tenant_name])
+  @@index([tenant_status])
+  @@index([tenant_status, tenant_applied_at])
+  @@map("tenant")
+}
+
+model TenantDetail {
+  tenant_detail_id              BigInt   @id @default(autoincrement())
+  tenant_id                     BigInt   @unique
+  tenant_detail_description     String?
+  tenant_detail_phone           String?  @db.VarChar(15)
+  tenant_detail_email           String?  @db.VarChar(100)
+  tenant_detail_zipcode         String?  @db.VarChar(10)
+  tenant_detail_address         String?  @db.VarChar(200)
+  tenant_detail_address_detail  String?  @db.VarChar(100)
+  tenant_detail_business_hours  String?  @db.VarChar(100)
+  tenant_detail_commission_rate Decimal? @db.Decimal(5, 2)
+  tenant_detail_created_at      DateTime @default(now())
+  tenant_detail_updated_at      DateTime @default(now()) @updatedAt
+  tenant                        Tenant   @relation(fields: [tenant_id], references: [tenant_id], onDelete: Cascade)
+
+  @@map("tenant_detail")
+}
+
+model TenantMember {
+  tenant_member_id                 BigInt    @id @default(autoincrement())
+  tenant_id                        BigInt
+  member_id                        BigInt
+  tenant_member_role               String    @db.VarChar(20)
+  tenant_member_approval_status    String    @default("pending") @db.VarChar(20)
+  tenant_member_approved_at        DateTime?
+  tenant_member_bank_name          String?   @db.VarChar(30)
+  tenant_member_bank_account       String?   @db.VarChar(50)
+  tenant_member_account_holder     String?   @db.VarChar(30)
+  tenant_member_commission_rate    Decimal   @default(0.0500) @db.Decimal(5, 4)
+  tenant_member_total_sales_amount Decimal   @default(0.00) @db.Decimal(15, 2)
+  tenant_member_total_sales_count  Int       @default(0)
+  tenant_member_suspended_by       String?   @db.VarChar(20)
+  tenant_member_suspended_reason   String?
+  tenant_member_applied_at         DateTime  @default(now())
+  tenant_member_activated_at       DateTime?
+  tenant_member_last_sale_at       DateTime?
+  tenant_member_suspended_at       DateTime?
+  products                         Product[]
+  member                           Member    @relation(fields: [member_id], references: [member_id], onDelete: Cascade)
+  tenant                           Tenant    @relation(fields: [tenant_id], references: [tenant_id], onDelete: Cascade)
+
+  @@index([tenant_id])
+  @@index([member_id])
+  @@index([tenant_id, tenant_member_role])
+  @@index([tenant_id, tenant_member_approval_status])
+  @@index([tenant_id, tenant_member_approval_status, tenant_member_applied_at])
+  @@map("tenant_member")
+}
+
+model Category {
+  category_id          BigInt     @id @default(autoincrement())
+  parent_category_id   BigInt?
+  category_name        String     @db.VarChar(50)
+  category_description String?
+  category_depth       Int        @default(1)
+  category_order       Int        @default(0)
+  category_path        String?    @db.VarChar(255)
+  category_is_active   Boolean    @default(true)
+  category_created_at  DateTime   @default(now())
+  category_updated_at  DateTime   @default(now()) @updatedAt
+  parent_category      Category?  @relation("CategoryHierarchy", fields: [parent_category_id], references: [category_id], onDelete: Cascade)
+  child_categories     Category[] @relation("CategoryHierarchy")
+  products             Product[]
+
+  @@index([parent_category_id])
+  @@index([category_depth])
+  @@index([category_path])
+  @@index([parent_category_id, category_order])
+  @@index([category_is_active])
+  @@map("category")
+}
+
+model Product {
+  product_id          BigInt         @id @default(autoincrement())
+  tenant_member_id    BigInt
+  category_id         BigInt         @default(0)
+  product_name        String         @db.VarChar(100)
+  product_description String?
+  product_price       Decimal        @db.Decimal(10, 2)
+  product_quantity    Int            @default(0)
+  product_status      String         @default("inactive") @db.VarChar(20)
+  product_view_count  Int            @default(0)
+  product_created_at  DateTime       @default(now())
+  product_updated_at  DateTime       @default(now()) @updatedAt
+  category            Category       @relation(fields: [category_id], references: [category_id])
+  tenant_member       TenantMember   @relation(fields: [tenant_member_id], references: [tenant_member_id], onDelete: Cascade)
+  product_images      ProductImg[]
+  shopping_carts      ShoppingCart[]
+
+  @@index([tenant_member_id])
+  @@index([category_id])
+  @@index([product_status])
+  @@index([product_status, product_created_at])
+  @@index([product_name])
+  @@index([product_price])
+  @@index([product_view_count])
+  @@map("product")
+}
+
+model ProductImg {
+  product_img_id         BigInt   @id @default(autoincrement())
+  product_id             BigInt
+  product_img_url        String   @db.VarChar(500)
+  product_image_sequence Int      @default(0)
+  product_img_created_at DateTime @default(now())
+  product                Product  @relation(fields: [product_id], references: [product_id], onDelete: Cascade)
+
+  @@unique([product_id, product_image_sequence])
+  @@index([product_id])
+  @@index([product_id, product_image_sequence])
+  @@map("product_img")
+}
+
+model Coupon {
+  coupon_id               BigInt    @id @default(autoincrement())
+  member_id               BigInt
+  coupon_name             String    @db.VarChar(50)
+  coupon_code             String    @unique @db.VarChar(20)
+  coupon_discount_type    String    @db.VarChar(10)
+  coupon_discount_value   Decimal   @db.Decimal(10, 2)
+  coupon_min_order_amount Decimal   @default(0.00) @db.Decimal(10, 2)
+  coupon_is_used          Boolean   @default(false)
+  coupon_used_at          DateTime?
+  coupon_expired_at       DateTime
+  coupon_created_at       DateTime  @default(now())
+  coupon_updated_at       DateTime  @default(now()) @updatedAt
+  member                  Member    @relation(fields: [member_id], references: [member_id], onDelete: Cascade)
+  orders                  Order[]
+
+  @@index([member_id])
+  @@index([coupon_code])
+  @@index([member_id, coupon_is_used, coupon_expired_at])
+  @@map("coupon")
+}
+
+model ShoppingCart {
+  shopping_cart_id         BigInt   @id @default(autoincrement())
+  member_id                BigInt
+  product_id               BigInt
+  shopping_cart_quantity   Int      @default(1)
+  shopping_cart_created_at DateTime @default(now())
+  shopping_cart_updated_at DateTime @default(now()) @updatedAt
+  member                   Member   @relation(fields: [member_id], references: [member_id], onDelete: Cascade)
+  product                  Product  @relation(fields: [product_id], references: [product_id], onDelete: Cascade)
+
+  @@unique([member_id, product_id])
+  @@index([member_id])
+  @@index([product_id])
+  @@index([shopping_cart_created_at])
+  @@map("shopping_cart")
+}
+
+model Order {
+  order_id                BigInt              @id @default(autoincrement())
+  member_id               BigInt
+  shopping_cart_id        BigInt?
+  coupon_id               BigInt?
+  order_number            String              @unique @db.VarChar(50)
+  order_total_amount      Decimal             @db.Decimal(15, 2)
+  order_discount_amount   Decimal             @default(0.00) @db.Decimal(15, 2)
+  order_subtotal_amount   Decimal             @db.Decimal(15, 2)
+  order_status            String              @default("pending") @db.VarChar(20)
+  order_recipient_name    String              @db.VarChar(30)
+  order_recipient_phone   String              @db.VarChar(15)
+  order_recipient_address String              @db.VarChar(200)
+  order_message           String?
+  order_created_at        DateTime            @default(now())
+  order_updated_at        DateTime            @default(now()) @updatedAt
+  member_transactions     MemberTransaction[]
+  coupon                  Coupon?             @relation(fields: [coupon_id], references: [coupon_id])
+  member                  Member              @relation(fields: [member_id], references: [member_id])
+  payment                 Payment?
+
+  @@index([member_id])
+  @@index([order_number])
+  @@index([order_status])
+  @@index([order_status, order_created_at])
+  @@index([order_created_at])
+  @@index([shopping_cart_id])
+  @@index([coupon_id])
+  @@map("order")
+}
+
+model Payment {
+  payment_id              BigInt    @id @default(autoincrement())
+  order_id                BigInt    @unique
+  payment_method          String    @db.VarChar(20)
+  payment_amount          Decimal   @db.Decimal(15, 2)
+  payment_discount_amount Decimal   @default(0.00) @db.Decimal(15, 2)
+  payment_status          String    @default("pending") @db.VarChar(20)
+  payment_transaction_id  String?   @unique @db.VarChar(100)
+  payment_pg_name         String?   @db.VarChar(30)
+  payment_approved_at     DateTime?
+  payment_cancelled_at    DateTime?
+  payment_created_at      DateTime  @default(now())
+  payment_updated_at      DateTime  @default(now()) @updatedAt
+  order                   Order     @relation(fields: [order_id], references: [order_id])
+
+  @@index([payment_status])
+  @@index([payment_transaction_id])
+  @@index([payment_approved_at])
+  @@map("payment")
+}
+
+// ====================================
+// 8. FleaMarket (플리마켓 데이터)
+// ====================================
+
+model FleaMarket {
+  flea_market_id          BigInt              @id @default(autoincrement())
+  flea_market_name        String              @db.VarChar(200)
+  flea_market_place       String              @db.VarChar(200)
+  flea_market_url         String?             @db.VarChar(500)
+  flea_market_image_url   String?             @db.VarChar(500)
+  flea_market_title       String?             @db.VarChar(500)
+  flea_market_latitude    Decimal?            @db.Decimal(10, 8)
+  flea_market_longitude   Decimal?            @db.Decimal(11, 8)
+  flea_market_created_at  DateTime            @default(now())
+  flea_market_updated_at  DateTime            @default(now()) @updatedAt
+
+  sessions                FleaMarketSession[]
+
+  @@index([flea_market_name])
+  @@index([flea_market_place])
+  @@index([flea_market_latitude, flea_market_longitude])
+  @@map("flea_market")
+}
+
+model FleaMarketSession {
+  flea_market_session_id         BigInt      @id @default(autoincrement())
+  flea_market_id                 BigInt
+  flea_market_session_start_date String      @db.VarChar(10)
+  flea_market_session_end_date   String      @db.VarChar(10)
+  flea_market_session_start_time String?     @db.VarChar(5)
+  flea_market_session_end_time   String?     @db.VarChar(5)
+  flea_market_session_notes      String?
+  flea_market_session_created_at DateTime    @default(now())
+
+  flea_market                    FleaMarket  @relation(fields: [flea_market_id], references: [flea_market_id], onDelete: Cascade)
+
+  @@index([flea_market_id])
+  @@index([flea_market_session_start_date])
+  @@index([flea_market_session_end_date])
+  @@index([flea_market_id, flea_market_session_start_date, flea_market_session_end_date])
+  @@map("flea_market_session")
+}
+
+// Old table - to be removed after migration
+// model flee_events {
+//   id         String    @id(map: "flea_events_pkey")
+//   event_name String
+//   event_date String
+//   place_name String
+//   lat        Float?
+//   lng        Float?
+//   created_at DateTime? @default(now()) @db.Timestamptz(6)
+// }

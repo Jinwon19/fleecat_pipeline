@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>카테고리 & 상품 관리</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 15px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        .button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            background-color: #007bff;
+            color: white;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .alert {
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>카테고리 & 상품 관리</h1>
+
+        <div id="alertBox" class="hidden"></div>
+
+        <!-- 1. 대분류 등록 -->
+        <div class="section">
+            <h2 class="section-title">1. 대분류 등록</h2>
+            <div class="form-group">
+                <label>대분류 이름</label>
+                <input type="text" id="category1Name" placeholder="예: 의류">
+            </div>
+            <button class="button" id="btnCategory1">대분류 등록</button>
+        </div>
+
+        <!-- 2. 중분류 등록 -->
+        <div class="section">
+            <h2 class="section-title">2. 중분류 등록</h2>
+            <div class="form-group">
+                <label>대분류 선택</label>
+                <select id="category1Select">
+                    <option value="">선택하세요</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>중분류 이름</label>
+                <input type="text" id="category2Name" placeholder="예: 상의">
+            </div>
+            <button class="button" id="btnCategory2">중분류 등록</button>
+        </div>
+
+        <!-- 3. 소분류 등록 -->
+        <div class="section">
+            <h2 class="section-title">3. 소분류 등록</h2>
+            <div class="form-group">
+                <label>대분류 선택</label>
+                <select id="category1SelectFor3">
+                    <option value="">선택하세요</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>중분류 선택</label>
+                <select id="category2SelectFor3">
+                    <option value="">먼저 대분류를 선택하세요</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>소분류 이름</label>
+                <input type="text" id="category3Name" placeholder="예: 티셔츠">
+            </div>
+            <button class="button" id="btnCategory3">소분류 등록</button>
+        </div>
+
+        <!-- 4. 상품 등록 -->
+        <div class="section">
+            <h2 class="section-title">4. 상품 등록</h2>
+            <div class="form-group">
+                <label>대분류 선택</label>
+                <select id="category1SelectForProduct">
+                    <option value="">선택하세요</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>중분류 선택</label>
+                <select id="category2SelectForProduct">
+                    <option value="">먼저 대분류를 선택하세요</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>소분류 선택</label>
+                <select id="category3SelectForProduct">
+                    <option value="">먼저 중분류를 선택하세요</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>상품 이름</label>
+                <input type="text" id="productName" placeholder="예: 화이트 반팔 티셔츠">
+            </div>
+            <div class="form-group">
+                <label>상품 가격</label>
+                <input type="number" id="productPrice" placeholder="예: 29000">
+            </div>
+            <button class="button" id="btnProduct">상품 등록</button>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = '/api/v1';
+
+        // 페이지 로드 시 대분류 목록 불러오기
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOMContentLoaded 이벤트 발생');
+            loadCategory1Options();
+
+            // 이벤트 리스너 등록
+            const btn1 = document.getElementById('btnCategory1');
+            console.log('btnCategory1 버튼:', btn1);
+            if (btn1) {
+                btn1.addEventListener('click', registerCategory1);
+                console.log('btnCategory1 이벤트 리스너 등록됨');
+            }
+
+            document.getElementById('btnCategory2').addEventListener('click', registerCategory2);
+            document.getElementById('btnCategory3').addEventListener('click', registerCategory3);
+            document.getElementById('btnProduct').addEventListener('click', registerProduct);
+
+            document.getElementById('category1SelectFor3').addEventListener('change', loadCategory2For3);
+            document.getElementById('category1SelectForProduct').addEventListener('change', loadCategory2ForProduct);
+            document.getElementById('category2SelectForProduct').addEventListener('change', loadCategory3ForProduct);
+        });
+
+        // 대분류 옵션 불러오기 (모든 셀렉트박스에 적용)
+        async function loadCategory1Options() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/admin/categories`);
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    const categories1 = result.data.filter(cat => cat.category_depth === 1);
+                    const options = categories1.map(cat =>
+                        `<option value="${cat.category_id}">${cat.category_name}</option>`
+                    ).join('');
+
+                    document.getElementById('category1Select').innerHTML = '<option value="">선택하세요</option>' + options;
+                    document.getElementById('category1SelectFor3').innerHTML = '<option value="">선택하세요</option>' + options;
+                    document.getElementById('category1SelectForProduct').innerHTML = '<option value="">선택하세요</option>' + options;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        // 1. 대분류 등록
+        async function registerCategory1() {
+            console.log('registerCategory1 함수 호출됨');
+            const name = document.getElementById('category1Name').value.trim();
+            console.log('입력된 이름:', name);
+            if (!name) {
+                showAlert('대분류 이름을 입력하세요.', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/admin/categories`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        category_name: name,
+                        category_depth: 1,
+                        category_order: 0,
+                        parent_category_id: null
+                    })
+                });
+
+                const result = await response.json();
+                if (response.ok && result.success) {
+                    showAlert('대분류가 등록되었습니다!', 'success');
+                    document.getElementById('category1Name').value = '';
+                    loadCategory1Options();
+                } else {
+                    showAlert(result.message || '등록 실패', 'error');
+                }
+            } catch (error) {
+                showAlert('서버 오류', 'error');
+            }
+        }
+
+        // 2. 중분류 등록
+        async function registerCategory2() {
+            const parentId = document.getElementById('category1Select').value;
+            const name = document.getElementById('category2Name').value.trim();
+
+            if (!parentId) {
+                showAlert('대분류를 선택하세요.', 'error');
+                return;
+            }
+            if (!name) {
+                showAlert('중분류 이름을 입력하세요.', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/admin/categories`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        category_name: name,
+                        category_depth: 2,
+                        category_order: 0,
+                        parent_category_id: parseInt(parentId)
+                    })
+                });
+
+                const result = await response.json();
+                if (response.ok && result.success) {
+                    showAlert('중분류가 등록되었습니다!', 'success');
+                    document.getElementById('category2Name').value = '';
+                } else {
+                    showAlert(result.message || '등록 실패', 'error');
+                }
+            } catch (error) {
+                showAlert('서버 오류', 'error');
+            }
+        }
+
+        // 3-1. 소분류용 중분류 로드
+        async function loadCategory2For3() {
+            const parentId = document.getElementById('category1SelectFor3').value;
+            const select = document.getElementById('category2SelectFor3');
+
+            if (!parentId) {
+                select.innerHTML = '<option value="">먼저 대분류를 선택하세요</option>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/admin/categories`);
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    const categories2 = result.data.filter(cat =>
+                        cat.category_depth === 2 && cat.parent_category_id === parseInt(parentId)
+                    );
+                    select.innerHTML = '<option value="">선택하세요</option>' +
+                        categories2.map(cat => `<option value="${cat.category_id}">${cat.category_name}</option>`).join('');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        // 3-2. 소분류 등록
+        async function registerCategory3() {
+            const parentId = document.getElementById('category2SelectFor3').value;
+            const name = document.getElementById('category3Name').value.trim();
+
+            if (!parentId) {
+                showAlert('중분류를 선택하세요.', 'error');
+                return;
+            }
+            if (!name) {
+                showAlert('소분류 이름을 입력하세요.', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/admin/categories`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        category_name: name,
+                        category_depth: 3,
+                        category_order: 0,
+                        parent_category_id: parseInt(parentId)
+                    })
+                });
+
+                const result = await response.json();
+                if (response.ok && result.success) {
+                    showAlert('소분류가 등록되었습니다!', 'success');
+                    document.getElementById('category3Name').value = '';
+                } else {
+                    showAlert(result.message || '등록 실패', 'error');
+                }
+            } catch (error) {
+                showAlert('서버 오류', 'error');
+            }
+        }
+
+        // 4-1. 상품용 중분류 로드
+        async function loadCategory2ForProduct() {
+            const parentId = document.getElementById('category1SelectForProduct').value;
+            const select = document.getElementById('category2SelectForProduct');
+
+            if (!parentId) {
+                select.innerHTML = '<option value="">먼저 대분류를 선택하세요</option>';
+                document.getElementById('category3SelectForProduct').innerHTML = '<option value="">먼저 중분류를 선택하세요</option>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/admin/categories`);
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    const categories2 = result.data.filter(cat =>
+                        cat.category_depth === 2 && cat.parent_category_id === parseInt(parentId)
+                    );
+                    select.innerHTML = '<option value="">선택하세요</option>' +
+                        categories2.map(cat => `<option value="${cat.category_id}">${cat.category_name}</option>`).join('');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        // 4-2. 상품용 소분류 로드
+        async function loadCategory3ForProduct() {
+            const parentId = document.getElementById('category2SelectForProduct').value;
+            const select = document.getElementById('category3SelectForProduct');
+
+            if (!parentId) {
+                select.innerHTML = '<option value="">먼저 중분류를 선택하세요</option>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/admin/categories`);
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    const categories3 = result.data.filter(cat =>
+                        cat.category_depth === 3 && cat.parent_category_id === parseInt(parentId)
+                    );
+                    select.innerHTML = '<option value="">선택하세요</option>' +
+                        categories3.map(cat => `<option value="${cat.category_id}">${cat.category_name}</option>`).join('');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        // 4-3. 상품 등록
+        async function registerProduct() {
+            const categoryId = document.getElementById('category3SelectForProduct').value;
+            const name = document.getElementById('productName').value.trim();
+            const price = document.getElementById('productPrice').value;
+
+            if (!categoryId) {
+                showAlert('소분류를 선택하세요.', 'error');
+                return;
+            }
+            if (!name) {
+                showAlert('상품 이름을 입력하세요.', 'error');
+                return;
+            }
+            if (!price || price <= 0) {
+                showAlert('가격을 입력하세요.', 'error');
+                return;
+            }
+
+            // TODO: 실제 상품 등록 API 엔드포인트로 요청
+            showAlert(`상품 등록 준비 완료!\n카테고리ID: ${categoryId}\n상품명: ${name}\n가격: ${price}원`, 'success');
+            console.log({ category_id: categoryId, product_name: name, product_price: price });
+        }
+
+        // 알림 표시
+        function showAlert(message, type) {
+            const alertBox = document.getElementById('alertBox');
+            alertBox.className = type === 'success' ? 'alert alert-success' : 'alert alert-error';
+            alertBox.textContent = message;
+            alertBox.classList.remove('hidden');
+
+            setTimeout(() => {
+                alertBox.classList.add('hidden');
+            }, 4000);
+        }
+    </script>
+</body>
+</html>

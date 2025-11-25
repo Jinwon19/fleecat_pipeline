@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>카테고리 관리 - Fleecat Admin</title>
+    <link rel="stylesheet" href="css/admin.css">
+    <style>
+        .section {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #007bff;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            align-items: flex-end;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .form-row .btn {
+            height: 38px;
+            min-width: 120px;
+        }
+
+        .alert {
+            padding: 12px 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .category-list {
+            background: white;
+            border-radius: 6px;
+            padding: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .category-item {
+            padding: 10px 15px;
+            margin-bottom: 5px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            border-left: 3px solid #007bff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .category-item.depth-2 {
+            margin-left: 30px;
+            border-left-color: #28a745;
+        }
+
+        .category-item.depth-3 {
+            margin-left: 60px;
+            border-left-color: #ffc107;
+        }
+
+        .category-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .category-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-depth1 {
+            background: #007bff;
+            color: white;
+        }
+
+        .badge-depth2 {
+            background: #28a745;
+            color: white;
+        }
+
+        .badge-depth3 {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .category-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>🔐 Fleecat Admin</h2>
+            </div>
+            <nav>
+                <ul class="sidebar-nav">
+                    <li><a href="dashboard.html">📊 대시보드</a></li>
+                    <li><a href="members.html">👥 회원 관리</a></li>
+                    <li><a href="tenants.html">🏪 판매사 관리</a></li>
+                    <li><a href="tenant-members.html">👔 판매사 구성원 관리</a></li>
+                    <li><a href="categories.html" class="active">📂 카테고리 관리</a></li>
+                    <li><a href="products.html">🛍️ 상품 관리</a></li>
+                    <li><a href="orders.html">📦 주문 관리</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1>카테고리 관리</h1>
+                <div class="page-actions">
+                    <span id="userEmail"></span>
+                    <button class="btn btn-secondary btn-sm" id="logoutButton">로그아웃</button>
+                </div>
+            </div>
+
+            <div id="alertBox" class="hidden"></div>
+
+            <!-- 1. 대분류 등록 -->
+            <div class="section">
+                <h2 class="section-title">1️⃣ 대분류 등록 (Depth 1)</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>대분류 이름 *</label>
+                        <input type="text" id="category1Name" class="form-control" placeholder="예: 의류, 전자기기, 식품">
+                    </div>
+                    <div class="form-group">
+                        <label>설명 (선택)</label>
+                        <input type="text" id="category1Description" class="form-control" placeholder="카테고리 설명">
+                    </div>
+                    <button class="btn btn-primary" id="btnCategory1">대분류 등록</button>
+                </div>
+            </div>
+
+            <!-- 2. 중분류 등록 -->
+            <div class="section">
+                <h2 class="section-title">2️⃣ 중분류 등록 (Depth 2)</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>대분류 선택 *</label>
+                        <select id="category1Select" class="form-control">
+                            <option value="">대분류를 선택하세요</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>중분류 이름 *</label>
+                        <input type="text" id="category2Name" class="form-control" placeholder="예: 상의, 하의, 신발">
+                    </div>
+                    <div class="form-group">
+                        <label>설명 (선택)</label>
+                        <input type="text" id="category2Description" class="form-control" placeholder="카테고리 설명">
+                    </div>
+                    <button class="btn btn-success" id="btnCategory2">중분류 등록</button>
+                </div>
+            </div>
+
+            <!-- 3. 소분류 등록 -->
+            <div class="section">
+                <h2 class="section-title">3️⃣ 소분류 등록 (Depth 3)</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>대분류 선택 *</label>
+                        <select id="category1SelectFor3" class="form-control">
+                            <option value="">대분류를 선택하세요</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>중분류 선택 *</label>
+                        <select id="category2SelectFor3" class="form-control">
+                            <option value="">먼저 대분류를 선택하세요</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>소분류 이름 *</label>
+                        <input type="text" id="category3Name" class="form-control" placeholder="예: 티셔츠, 셔츠, 후드티">
+                    </div>
+                    <div class="form-group">
+                        <label>설명 (선택)</label>
+                        <input type="text" id="category3Description" class="form-control" placeholder="카테고리 설명">
+                    </div>
+                    <button class="btn btn-warning" id="btnCategory3">소분류 등록</button>
+                </div>
+            </div>
+
+            <!-- 4. 전체 카테고리 목록 -->
+            <div class="card">
+                <div class="card-header">
+                    📋 전체 카테고리 목록 (계층형)
+                    <button class="btn btn-sm btn-secondary" id="refreshButton" style="margin-left: auto;">새로고침</button>
+                </div>
+                <div class="card-body">
+                    <div id="categoryList" class="category-list">
+                        <p class="text-center text-muted">데이터를 불러오는 중...</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAllCategories();
+            loadCategory1Options();
+
+            // 이벤트 리스너 등록
+            document.getElementById('btnCategory1').addEventListener('click', registerCategory1);
+            document.getElementById('btnCategory2').addEventListener('click', registerCategory2);
+            document.getElementById('btnCategory3').addEventListener('click', registerCategory3);
+            document.getElementById('refreshButton').addEventListener('click', loadAllCategories);
+
+            document.getElementById('category1SelectFor3').addEventListener('change', loadCategory2For3);
+        });
+
+        // 전체 카테고리 목록 로드
+        async function loadAllCategories() {
+            try {
+                const response = await apiCall('GET', '/api/v1/admin/categories?includeInactive=false');
+
+                if (response.success) {
+                    renderCategoryList(response.data);
+                }
+            } catch (error) {
+                console.error('카테고리 목록 로드 실패:', error);
+                showAlert('카테고리 목록을 불러올 수 없습니다.', 'error');
+            }
+        }
+
+        // 대분류 옵션 불러오기
+        async function loadCategory1Options() {
+            try {
+                const response = await apiCall('GET', '/api/v1/admin/categories?includeInactive=false');
+
+                if (response.success) {
+                    // API는 대분류만 반환 (child_categories에 중/소분류 포함)
+                    const categories1 = response.data;
+                    const options = categories1.map(cat =>
+                        `<option value="${cat.category_id}">${cat.category_name}</option>`
+                    ).join('');
+
+                    document.getElementById('category1Select').innerHTML = '<option value="">대분류를 선택하세요</option>' + options;
+                    document.getElementById('category1SelectFor3').innerHTML = '<option value="">대분류를 선택하세요</option>' + options;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        // 1. 대분류 등록
+        async function registerCategory1() {
+            const name = document.getElementById('category1Name').value.trim();
+            const description = document.getElementById('category1Description').value.trim();
+
+            if (!name) {
+                showAlert('대분류 이름을 입력하세요.', 'error');
+                return;
+            }
+
+            try {
+                const response = await apiCall('POST', '/api/v1/admin/categories', {
+                    category_name: name,
+                    category_description: description || null,
+                    category_order: 0,
+                    parent_category_id: null
+                });
+
+                if (response.success) {
+                    showAlert('✅ 대분류가 등록되었습니다!', 'success');
+                    document.getElementById('category1Name').value = '';
+                    document.getElementById('category1Description').value = '';
+                    loadCategory1Options();
+                    loadAllCategories();
+                } else {
+                    showAlert(response.message || '등록 실패', 'error');
+                }
+            } catch (error) {
+                showAlert('서버 오류: ' + error.message, 'error');
+            }
+        }
+
+        // 2. 중분류 등록
+        async function registerCategory2() {
+            const parentId = document.getElementById('category1Select').value;
+            const name = document.getElementById('category2Name').value.trim();
+            const description = document.getElementById('category2Description').value.trim();
+
+            if (!parentId) {
+                showAlert('대분류를 선택하세요.', 'error');
+                return;
+            }
+            if (!name) {
+                showAlert('중분류 이름을 입력하세요.', 'error');
+                return;
+            }
+
+            try {
+                const response = await apiCall('POST', '/api/v1/admin/categories', {
+                    category_name: name,
+                    category_description: description || null,
+                    category_order: 0,
+                    parent_category_id: parseInt(parentId)
+                });
+
+                if (response.success) {
+                    showAlert('✅ 중분류가 등록되었습니다!', 'success');
+                    document.getElementById('category2Name').value = '';
+                    document.getElementById('category2Description').value = '';
+                    loadAllCategories();
+                } else {
+                    showAlert(response.message || '등록 실패', 'error');
+                }
+            } catch (error) {
+                showAlert('서버 오류: ' + error.message, 'error');
+            }
+        }
+
+        // 3-1. 소분류용 중분류 로드
+        async function loadCategory2For3() {
+            const parentId = document.getElementById('category1SelectFor3').value;
+            const select = document.getElementById('category2SelectFor3');
+
+            if (!parentId) {
+                select.innerHTML = '<option value="">먼저 대분류를 선택하세요</option>';
+                return;
+            }
+
+            try {
+                const response = await apiCall('GET', '/api/v1/admin/categories?includeInactive=false');
+
+                if (response.success) {
+                    // 계층형 구조에서 해당 대분류 찾기
+                    const parent = response.data.find(cat => cat.category_id === parentId);
+
+                    if (parent && parent.child_categories && parent.child_categories.length > 0) {
+                        const categories2 = parent.child_categories;
+                        select.innerHTML = '<option value="">중분류를 선택하세요</option>' +
+                            categories2.map(cat => `<option value="${cat.category_id}">${cat.category_name}</option>`).join('');
+                    } else {
+                        select.innerHTML = '<option value="">중분류가 없습니다</option>';
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        // 3-2. 소분류 등록
+        async function registerCategory3() {
+            const parentId = document.getElementById('category2SelectFor3').value;
+            const name = document.getElementById('category3Name').value.trim();
+            const description = document.getElementById('category3Description').value.trim();
+
+            if (!parentId) {
+                showAlert('중분류를 선택하세요.', 'error');
+                return;
+            }
+            if (!name) {
+                showAlert('소분류 이름을 입력하세요.', 'error');
+                return;
+            }
+
+            try {
+                const response = await apiCall('POST', '/api/v1/admin/categories', {
+                    category_name: name,
+                    category_description: description || null,
+                    category_order: 0,
+                    parent_category_id: parseInt(parentId)
+                });
+
+                if (response.success) {
+                    showAlert('✅ 소분류가 등록되었습니다!', 'success');
+                    document.getElementById('category3Name').value = '';
+                    document.getElementById('category3Description').value = '';
+                    loadAllCategories();
+                } else {
+                    showAlert(response.message || '등록 실패', 'error');
+                }
+            } catch (error) {
+                showAlert('서버 오류: ' + error.message, 'error');
+            }
+        }
+
+        // 계층형 구조를 플랫한 배열로 변환 (재귀)
+        function flattenCategories(categories) {
+            const result = [];
+
+            function traverse(cats) {
+                cats.forEach(cat => {
+                    result.push(cat);
+                    if (cat.child_categories && cat.child_categories.length > 0) {
+                        traverse(cat.child_categories);
+                    }
+                });
+            }
+
+            traverse(categories);
+            return result;
+        }
+
+        // 카테고리 목록 렌더링 (계층형)
+        function renderCategoryList(categories) {
+            const container = document.getElementById('categoryList');
+
+            if (categories.length === 0) {
+                container.innerHTML = '<p class="text-center text-muted">등록된 카테고리가 없습니다.</p>';
+                return;
+            }
+
+            // 계층형 구조를 플랫하게 변환
+            const flatCategories = flattenCategories(categories);
+
+            // Depth별로 정렬 (이미 계층 순서대로 되어 있지만, 안전하게 정렬)
+            const sorted = flatCategories.sort((a, b) => {
+                // path로 비교하여 계층 순서 유지
+                return (a.category_path || '').localeCompare(b.category_path || '');
+            });
+
+            let html = '';
+            sorted.forEach(cat => {
+                const depthClass = `depth-${cat.category_depth}`;
+                const badgeClass = `badge-depth${cat.category_depth}`;
+                const depthLabel = cat.category_depth === 1 ? '대분류' : cat.category_depth === 2 ? '중분류' : '소분류';
+
+                html += `
+                    <div class="category-item ${depthClass}">
+                        <div class="category-info">
+                            <span class="category-badge ${badgeClass}">${depthLabel}</span>
+                            <strong>${cat.category_name}</strong>
+                            ${cat.category_description ? `<span class="text-muted">- ${cat.category_description}</span>` : ''}
+                            ${cat.category_path ? `<span class="text-muted text-sm">(${cat.category_path})</span>` : ''}
+                        </div>
+                        <div class="category-actions">
+                            <button class="btn btn-sm btn-primary" onclick="toggleCategory(${cat.category_id}, ${!cat.category_is_active})">
+                                ${cat.category_is_active ? '비활성화' : '활성화'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // 카테고리 활성화/비활성화 토글
+        async function toggleCategory(categoryId, isActive) {
+            try {
+                const response = await apiCall('PATCH', `/api/v1/admin/categories/${categoryId}`, {
+                    category_is_active: isActive
+                });
+
+                if (response.success) {
+                    showAlert(`카테고리가 ${isActive ? '활성화' : '비활성화'}되었습니다.`, 'success');
+                    loadAllCategories();
+                } else {
+                    showAlert(response.message || '변경 실패', 'error');
+                }
+            } catch (error) {
+                showAlert('서버 오류: ' + error.message, 'error');
+            }
+        }
+
+        // 알림 표시
+        function showAlert(message, type) {
+            const alertBox = document.getElementById('alertBox');
+            alertBox.className = type === 'success' ? 'alert alert-success' : 'alert alert-error';
+            alertBox.textContent = message;
+            alertBox.classList.remove('hidden');
+
+            setTimeout(() => {
+                alertBox.classList.add('hidden');
+            }, 4000);
+        }
+    </script>
+</body>
+</html>

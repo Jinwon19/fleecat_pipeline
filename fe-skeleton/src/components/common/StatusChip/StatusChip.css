@@ -1,0 +1,241 @@
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.status-chip:disabled {
+  cursor: default;
+}
+
+.status-chip__label {
+  line-height: 1;
+}
+
+.status-chip__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* Gray (전체) */
+.status-chip--gray {
+  background: var(--color-gray-100);
+  color: var(--color-gray-700);
+  border-color: var(--color-gray-200);
+}
+
+.status-chip--gray .status-chip__count {
+  background: var(--color-gray-200);
+  color: var(--color-gray-700);
+}
+
+.status-chip--gray:not(:disabled):hover {
+  background: var(--color-gray-200);
+  border-color: var(--color-gray-300);
+}
+
+.status-chip--gray.status-chip--selected {
+  background: var(--color-gray-700);
+  color: var(--color-white);
+  border-color: var(--color-gray-700);
+}
+
+.status-chip--gray.status-chip--selected .status-chip__count {
+  background: var(--color-gray-800);
+  color: var(--color-white);
+}
+
+/* Yellow (결제대기) */
+.status-chip--yellow {
+  background: #fef3c7;
+  color: #92400e;
+  border-color: #fde68a;
+}
+
+.status-chip--yellow .status-chip__count {
+  background: #fde68a;
+  color: #92400e;
+}
+
+.status-chip--yellow:not(:disabled):hover {
+  background: #fde68a;
+  border-color: #fcd34d;
+}
+
+.status-chip--yellow.status-chip--selected {
+  background: #f59e0b;
+  color: var(--color-white);
+  border-color: #f59e0b;
+}
+
+.status-chip--yellow.status-chip--selected .status-chip__count {
+  background: #d97706;
+  color: var(--color-white);
+}
+
+/* Blue (상품준비중, 결제완료) */
+.status-chip--blue {
+  background: #dbeafe;
+  color: #1e40af;
+  border-color: #bfdbfe;
+}
+
+.status-chip--blue .status-chip__count {
+  background: #bfdbfe;
+  color: #1e40af;
+}
+
+.status-chip--blue:not(:disabled):hover {
+  background: #bfdbfe;
+  border-color: #93c5fd;
+}
+
+.status-chip--blue.status-chip--selected {
+  background: #3b82f6;
+  color: var(--color-white);
+  border-color: #3b82f6;
+}
+
+.status-chip--blue.status-chip--selected .status-chip__count {
+  background: #2563eb;
+  color: var(--color-white);
+}
+
+/* Purple (배송중) */
+.status-chip--purple {
+  background: #e9d5ff;
+  color: #6b21a8;
+  border-color: #d8b4fe;
+}
+
+.status-chip--purple .status-chip__count {
+  background: #d8b4fe;
+  color: #6b21a8;
+}
+
+.status-chip--purple:not(:disabled):hover {
+  background: #d8b4fe;
+  border-color: #c084fc;
+}
+
+.status-chip--purple.status-chip--selected {
+  background: #9333ea;
+  color: var(--color-white);
+  border-color: #9333ea;
+}
+
+.status-chip--purple.status-chip--selected .status-chip__count {
+  background: #7e22ce;
+  color: var(--color-white);
+}
+
+/* Green (배송완료) */
+.status-chip--green {
+  background: #d1fae5;
+  color: #065f46;
+  border-color: #a7f3d0;
+}
+
+.status-chip--green .status-chip__count {
+  background: #a7f3d0;
+  color: #065f46;
+}
+
+.status-chip--green:not(:disabled):hover {
+  background: #a7f3d0;
+  border-color: #6ee7b7;
+}
+
+.status-chip--green.status-chip--selected {
+  background: #10b981;
+  color: var(--color-white);
+  border-color: #10b981;
+}
+
+.status-chip--green.status-chip--selected .status-chip__count {
+  background: #059669;
+  color: var(--color-white);
+}
+
+/* Red (취소) */
+.status-chip--red {
+  background: #fee2e2;
+  color: #991b1b;
+  border-color: #fecaca;
+}
+
+.status-chip--red .status-chip__count {
+  background: #fecaca;
+  color: #991b1b;
+}
+
+.status-chip--red:not(:disabled):hover {
+  background: #fecaca;
+  border-color: #fca5a5;
+}
+
+.status-chip--red.status-chip--selected {
+  background: #ef4444;
+  color: var(--color-white);
+  border-color: #ef4444;
+}
+
+.status-chip--red.status-chip--selected .status-chip__count {
+  background: #dc2626;
+  color: var(--color-white);
+}
+
+/* Orange (환불, 교환/반품 요청) */
+.status-chip--orange {
+  background: #ffedd5;
+  color: #9a3412;
+  border-color: #fed7aa;
+}
+
+.status-chip--orange .status-chip__count {
+  background: #fed7aa;
+  color: #9a3412;
+}
+
+.status-chip--orange:not(:disabled):hover {
+  background: #fed7aa;
+  border-color: #fdba74;
+}
+
+.status-chip--orange.status-chip--selected {
+  background: #f97316;
+  color: var(--color-white);
+  border-color: #f97316;
+}
+
+.status-chip--orange.status-chip--selected .status-chip__count {
+  background: #ea580c;
+  color: var(--color-white);
+}
+
+/* Active state */
+.status-chip:not(:disabled):active {
+  transform: scale(0.97);
+}
+
+/* Focus state */
+.status-chip:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}

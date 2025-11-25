@@ -1,0 +1,269 @@
+/* 테이블 뷰 (데스크톱) */
+.product-table-wrapper {
+  overflow-x: auto;
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+}
+
+.product-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.product-table thead {
+  background: var(--bg-secondary);
+}
+
+.product-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+
+.product-table th:first-child {
+  width: 40px;
+  text-align: center;
+}
+
+.product-table td {
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.product-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.product-table tbody tr:hover {
+  background: var(--bg-secondary);
+}
+
+.product-table td:first-child {
+  text-align: center;
+}
+
+.product-thumbnail {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.product-name {
+  font-weight: 500;
+  max-width: 250px;
+}
+
+.product-price {
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.stock-zero {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border: 1px solid var(--border-color);
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 13px;
+  outline: none;
+}
+
+.btn-action:focus {
+  border-color: var(--color-gray-400);
+  outline: none;
+}
+
+.btn-action:active {
+  transform: scale(0.95);
+}
+
+.btn-edit {
+  color: var(--primary-color);
+}
+
+.btn-edit:hover {
+  background: #f3f4f6;
+  border-color: var(--primary-color);
+}
+
+.btn-edit:focus {
+  border-color: var(--primary-color);
+}
+
+.btn-edit:active {
+  background: #e5e7eb;
+}
+
+.btn-delete {
+  color: #ef4444;
+}
+
+.btn-delete:hover {
+  background: #fee2e2;
+  border-color: #ef4444;
+}
+
+.btn-delete:focus {
+  border-color: #ef4444;
+}
+
+.btn-delete:active {
+  background: #fecaca;
+}
+
+.empty-row {
+  text-align: center;
+  padding: 60px 20px !important;
+  color: var(--text-secondary);
+}
+
+/* 카드 뷰 (모바일) */
+.product-cards {
+  display: none;
+}
+
+/* 반응형 */
+@media (max-width: 1024px) {
+  .product-table-wrapper {
+    display: none;
+  }
+
+  .product-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .product-card-item {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 16px;
+    transition: all 0.2s ease;
+  }
+
+  .product-card-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .card-body {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .card-thumbnail {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    flex-shrink: 0;
+  }
+
+  .card-info {
+    flex: 1;
+  }
+
+  .card-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 6px 0;
+  }
+
+  .card-category {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin: 0 0 8px 0;
+  }
+
+  .card-price {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin: 0 0 6px 0;
+  }
+
+  .card-stock {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  .card-stock.zero {
+    color: #ef4444;
+    font-weight: 600;
+  }
+
+  .card-footer {
+    display: flex;
+    gap: 8px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .card-footer .btn-action {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-secondary);
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-card-item {
+    padding: 12px;
+  }
+
+  .card-thumbnail {
+    width: 60px;
+    height: 60px;
+  }
+
+  .card-title {
+    font-size: 14px;
+  }
+
+  .card-price {
+    font-size: 15px;
+  }
+}

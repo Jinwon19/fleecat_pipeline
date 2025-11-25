@@ -1,0 +1,187 @@
+.restock-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.restock-modal {
+  background-color: white;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.restock-modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.restock-modal__header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.restock-modal__close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #999;
+}
+
+.restock-modal__body {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.restock-modal__product {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.restock-modal__product img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.restock-modal__product-brand {
+  font-size: 12px;
+  color: #666;
+  margin: 0 0 4px 0;
+}
+
+.restock-modal__product-name {
+  font-size: 14px;
+  color: #333;
+  margin: 0 0 8px 0;
+}
+
+.restock-modal__product-price {
+  font-size: 16px;
+  font-weight: bold;
+  color: #FF1493;
+  margin: 0;
+}
+
+.restock-modal__option {
+  margin-bottom: 20px;
+}
+
+.restock-modal__option label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.restock-modal__option select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.restock-modal__methods {
+  margin-bottom: 20px;
+}
+
+.restock-modal__methods label {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.restock-modal__method-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.restock-modal__method {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.restock-modal__method:hover {
+  border-color: #FF1493;
+  background-color: #fff5fb;
+}
+
+.restock-modal__method input[type='checkbox'] {
+  cursor: pointer;
+}
+
+.restock-modal__terms {
+  margin-top: 20px;
+  padding: 16px;
+  background-color: #f8f8f8;
+  border-radius: 4px;
+}
+
+.restock-modal__terms label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.restock-modal__terms-desc {
+  margin: 8px 0 0 24px;
+  font-size: 12px;
+  color: #666;
+  line-height: 1.5;
+}
+
+.restock-modal__footer {
+  padding: 16px 20px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.restock-modal__btn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.restock-modal__btn--submit {
+  background-color: #FF1493;
+  color: white;
+}
+
+.restock-modal__btn--submit:hover {
+  background-color: #e01282;
+}

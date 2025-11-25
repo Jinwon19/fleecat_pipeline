@@ -1,0 +1,127 @@
+.sales-chart-container {
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 24px;
+  margin-top: 24px;
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.chart-header h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.chart-tabs {
+  display: flex;
+  gap: 8px;
+  background: var(--bg-secondary);
+  padding: 4px;
+  border-radius: 8px;
+}
+
+.chart-tabs button {
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.chart-tabs button:hover {
+  background: white;
+  color: var(--text-primary);
+}
+
+.chart-tabs button:focus {
+  background: white;
+  outline: none;
+}
+
+.chart-tabs button:active {
+  background: var(--bg-secondary);
+  transform: scale(0.98);
+}
+
+.chart-tabs button.active {
+  background: white;
+  color: var(--text-primary);
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chart-tabs button.active:hover {
+  background: white;
+  color: var(--text-primary);
+}
+
+.chart-tabs button.active:focus {
+  background: white;
+  outline: none;
+}
+
+.chart-tabs button.active:active {
+  background: var(--bg-secondary);
+  transform: scale(0.98);
+}
+
+.chart-wrapper {
+  width: 100%;
+  height: 300px;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .sales-chart-container {
+    padding: 16px;
+  }
+
+  .chart-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .chart-tabs {
+    width: 100%;
+  }
+
+  .chart-tabs button {
+    flex: 1;
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .chart-wrapper {
+    height: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chart-header h3 {
+    font-size: 16px;
+  }
+
+  .chart-tabs button {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .chart-wrapper {
+    height: 220px;
+  }
+}

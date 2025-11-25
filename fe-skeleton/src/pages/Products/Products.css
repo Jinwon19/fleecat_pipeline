@@ -1,0 +1,172 @@
+/* Loading, Error, and Empty States */
+.products-loading,
+.products-error,
+.products-empty {
+  padding: 24px;
+  text-align: center;
+}
+
+.products-error__message {
+  color: crimson;
+  margin: 0 0 12px;
+}
+
+.products-error__retry {
+  padding: 8px 16px;
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.products-error__retry:hover {
+  background: #e0e0e0;
+}
+
+/* Product Grid Component */
+.product-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+.product-grid--loading {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+/* Product Card Component */
+.product-card {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 12px;
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.product-card__image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  transition: transform 0.3s ease;
+}
+
+.product-card--link:hover .product-card__image {
+  transform: scale(1.05);
+}
+
+.product-card__title {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.product-card__description {
+  margin: 0 0 12px;
+  color: #555;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.product-card__price {
+  font-size: 15px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Link variant */
+.product-card--link {
+  overflow: hidden;
+  padding: 0;
+}
+
+.product-card--link .product-card__image {
+  border-radius: 0;
+  margin-bottom: 0;
+}
+
+.product-card--link .product-card__content {
+  padding: 12px;
+}
+
+/* Button variant */
+.product-card--button {
+  border: none;
+  background: #fff;
+  display: block;
+  width: 100%;
+}
+
+/* Skeleton loading card */
+.product-card--skeleton {
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 12px;
+  background: #fff;
+}
+
+.product-card__skeleton-image {
+  width: 100%;
+  height: 150px;
+  background: #f2f2f2;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+.product-card__skeleton-title {
+  height: 16px;
+  background: #f5f5f5;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.product-card__skeleton-price {
+  height: 16px;
+  background: #f5f5f5;
+  border-radius: 4px;
+  width: 40%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .product-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .product-card__image {
+    height: 120px;
+  }
+
+  .product-card__title {
+    font-size: 14px;
+  }
+
+  .product-card__description {
+    font-size: 13px;
+  }
+
+  .product-card__price {
+    font-size: 14px;
+  }
+}

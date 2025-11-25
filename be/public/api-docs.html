@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fleecat API Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --code-bg: #1e293b;
+            --code-text: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        /* Layout */
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--card-bg);
+            height: calc(100vh - 120px);
+            position: sticky;
+            top: 120px;
+            overflow-y: auto;
+            border-right: 1px solid var(--border-color);
+            padding: 2rem 0;
+        }
+
+        .sidebar-section {
+            margin-bottom: 2rem;
+            padding: 0 1.5rem;
+        }
+
+        .sidebar-section h3 {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            margin: 0 -1rem;
+            color: var(--text-color);
+            text-decoration: none;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .sidebar-link:hover {
+            background: var(--bg-color);
+            color: var(--primary-color);
+        }
+
+        .sidebar-link.active {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            font-weight: 600;
+        }
+
+        .http-method {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        .method-post {
+            background: #10b981;
+            color: white;
+        }
+
+        .method-get {
+            background: #3b82f6;
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .api-section {
+            background: var(--card-bg);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .api-section h2 {
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .api-section h3 {
+            font-size: 1.25rem;
+            margin: 2rem 0 1rem 0;
+            color: var(--text-color);
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .api-section h4 {
+            font-size: 1rem;
+            margin: 1.5rem 0 0.75rem 0;
+            color: var(--text-color);
+        }
+
+        .endpoint {
+            display: flex;
+            align-items: center;
+            background: var(--bg-color);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.95rem;
+        }
+
+        .endpoint .method {
+            font-weight: 700;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            margin-right: 1rem;
+        }
+
+        .endpoint .path {
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+
+        thead {
+            background: var(--bg-color);
+        }
+
+        th {
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-color);
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        td {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        tr:hover {
+            background: var(--bg-color);
+        }
+
+        /* Code Block */
+        .code-block {
+            position: relative;
+            margin: 1rem 0;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #2d3748;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+
+        .code-header .language {
+            color: #e2e8f0;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .copy-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .copy-btn.copied {
+            background: var(--success-color);
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 1.5rem;
+            border-radius: 0 0 0.5rem 0.5rem;
+            overflow-x: auto;
+            margin: 0;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        code {
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.875rem;
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin: 0 0.25rem;
+        }
+
+        .badge-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .badge-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        /* Alert */
+        .alert {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            border-left: 4px solid;
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            border-color: #3b82f6;
+            color: #1e40af;
+        }
+
+        .alert-warning {
+            background: #fef3c7;
+            border-color: #f59e0b;
+            color: #92400e;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            border-color: #10b981;
+            color: #065f46;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            border-color: #ef4444;
+            color: #991b1b;
+        }
+
+        /* Try It Out */
+        .try-it-out {
+            background: linear-gradient(135deg, #667eea10, #764ba210);
+            border: 2px solid var(--primary-color);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .try-it-out h4 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-color);
+            font-size: 0.875rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            font-family: 'Monaco', 'Consolas', monospace;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .response-viewer {
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .response-viewer.show {
+            display: block;
+        }
+
+        /* Flow Diagram */
+        .flow-diagram {
+            background: var(--bg-color);
+            padding: 2rem;
+            border-radius: 0.75rem;
+            margin: 1.5rem 0;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            margin: 1rem 0;
+        }
+
+        .flow-number {
+            background: var(--primary-color);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .flow-content {
+            flex: 1;
+        }
+
+        .flow-arrow {
+            text-align: center;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin: 0.5rem 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                display: none;
+            }
+        }
+
+        /* Syntax Highlighting */
+        .json-key { color: #f59e0b; }
+        .json-string { color: #10b981; }
+        .json-number { color: #3b82f6; }
+        .json-boolean { color: #8b5cf6; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🚀 Fleecat API Documentation</h1>
+        <p>백엔드 API 사용 가이드 - Step 1 인증 API</p>
+    </div>
+
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3>시작하기</h3>
+                <a href="#intro" class="sidebar-link">소개</a>
+                <a href="#base-url" class="sidebar-link">Base URL</a>
+                <a href="#authentication" class="sidebar-link">인증 방식</a>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>인증 API</h3>
+                <a href="#register" class="sidebar-link">
+                    <span class="http-method method-post">POST</span> 회원가입
+                </a>
+                <a href="#login" class="sidebar-link">
+                    <span class="http-method method-post">POST</span> 로그인
+                </a>
+                <a href="#social-login" class="sidebar-link">
+                    <span class="http-method method-get">GET</span> 소셜 로그인
+                </a>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>참고 자료</h3>
+                <a href="#errors" class="sidebar-link">에러 코드</a>
+                <a href="#examples" class="sidebar-link">전체 예제</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- 소개 -->
+            <section id="intro" class="api-section">
+                <h2>📖 소개</h2>
+                <p>Fleecat API는 RESTful 설계 원칙을 따르는 백엔드 API입니다. 이 문서에서는 회원가입, 로그인, 소셜 로그인 등 인증 관련 API를 다룹니다.</p>
+
+                <div class="alert alert-info">
+                    <strong>💡 팁:</strong> 모든 코드 예제는 복사 버튼을 클릭하여 클립보드에 복사할 수 있습니다.
+                </div>
+            </section>
+
+            <!-- Base URL -->
+            <section id="base-url" class="api-section">
+                <h2>🌐 Base URL</h2>
+
+                <h4>로컬 개발 환경</h4>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">BASE URL</span>
+                        <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                    </div>
+                    <pre>http://localhost:3000/api/v1</pre>
+                </div>
+
+                <h4>프로덕션 환경 (Railway)</h4>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">BASE URL</span>
+                        <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                    </div>
+                    <pre>https://fleecat-production.up.railway.app/api/v1</pre>
+                </div>
+            </section>
+
+            <!-- 인증 방식 -->
+            <section id="authentication" class="api-section">
+                <h2>🔐 인증 방식</h2>
+                <p>Fleecat API는 JWT(JSON Web Token) 기반 인증을 사용합니다.</p>
+
+                <h3>Public API (인증 불필요)</h3>
+                <ul>
+                    <li>POST /auth/register - 회원가입</li>
+                    <li>POST /auth/login - 로그인</li>
+                    <li>GET /auth/social/:provider - 소셜 로그인 URL 생성</li>
+                </ul>
+
+                <h3>Private API (인증 필요)</h3>
+                <p>다음 헤더를 포함하여 요청해야 합니다:</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">HTTP Header</span>
+                        <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                    </div>
+                    <pre>Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</pre>
+                </div>
+            </section>
+
+            <!-- 회원가입 API -->
+            <section id="register" class="api-section">
+                <h2>📝 회원가입</h2>
+                <p>새로운 회원을 등록하고 JWT 토큰을 발급받습니다.</p>
+
+                <div class="endpoint">
+                    <span class="method method-post">POST</span>
+                    <span class="path">/auth/register</span>
+                </div>
+
+                <span class="badge badge-success">Public</span>
+                <span class="badge badge-info">인증 불필요</span>
+
+                <h3>요청 본문</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>필드</th>
+                            <th>타입</th>
+                            <th>필수</th>
+                            <th>설명</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>email</code></td>
+                            <td>String</td>
+                            <td>✅</td>
+                            <td>이메일 주소 (유일해야 함)</td>
+                        </tr>
+                        <tr>
+                            <td><code>password</code></td>
+                            <td>String</td>
+                            <td>✅</td>
+                            <td>비밀번호 (8자 이상, 특수문자 포함)</td>
+                        </tr>
+                        <tr>
+                            <td><code>name</code></td>
+                            <td>String</td>
+                            <td>✅</td>
+                            <td>이름 (2~30자)</td>
+                        </tr>
+                        <tr>
+                            <td><code>nickname</code></td>
+                            <td>String</td>
+                            <td>✅</td>
+                            <td>닉네임 (2~30자, 유일해야 함)</td>
+                        </tr>
+                        <tr>
+                            <td><code>phone</code></td>
+                            <td>String</td>
+                            <td>❌</td>
+                            <td>전화번호 (예: 010-1234-5678)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>요청 예제</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">cURL</span>
+                        <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                    </div>
+                    <pre>curl -X POST http://localhost:3000/api/v1/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "user@example.com",
+    "password": "secure123!",
+    "name": "홍길동",
+    "nickname": "길동이",
+    "phone": "010-1234-5678"
+  }'</pre>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">JavaScript (fetch)</span>
+                        <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                    </div>
+                    <pre>const response = await fetch('http://localhost:3000/api/v1/auth/register', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    email: 'user@example.com',
+    password: 'secure123!',
+    name: '홍길동',
+    nickname: '길동이',
+    phone: '010-1234-5678'
+  })
+});
+
+const data = await response.json();
+console.log(data);</pre>
+                </div>
+
+                <h3>응답 예제 (201 Created)</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">JSON</span>
+                        <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                    </div>
+                    <pre>{
+  "success": true,
+  "message": "Registration successful",
+  "data": {
+    "member": {
+      "member_id": 123,
+      "member_email": "user@example.com",
+      "member_name": "홍길동",
+      "member_nickname": "길동이",
+      "member_phone": "010-1234-5678",
+      "member_status": "active",
+      "role": "buyer"
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  }
+}</pre>
+                </div>
+
+                <!-- Try It Out -->
+                <div class="try-it-out">
+                    <h4>🧪 직접 테스트하기</h4>
+                    <form onsubmit="testRegister(event)">
+                        <div class="form-group">
+                            <label>이메일</label>
+                            <input type="email" id="register-email" placeholder="user@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label>비밀번호</label>
+                            <input type="password" id="register-password" placeholder="secure123!" required>
+                        </div>
+                        <div class="form-group">
+                            <label>이름</label>
+                            <input type="text" id="register-name" placeholder="홍길동" required>
+                        </div>
+                        <div class="form-group">
+                            <label>닉네임</label>
+                            <input type="text" id="register-nickname" placeholder="길동이" required>
+                        </div>
+                        <div class="form-group">
+                            <label>전화번호 (선택)</label>
+                            <input type="text" id="register-phone" placeholder="010-1234-5678">
+                        </div>
+                        <button type="submit" class="btn btn-primary">요청 보내기</button>
+                    </form>
+                    <div id="register-response" class="response-viewer"></div>
+                </div>
+            </section>
+
+            <!-- 로그인 API -->
+            <section id="login" class="api-section">
+                <h2>🔑 로그인</h2>
+                <p>이메일과 비밀번호로 로그인하여 JWT 토큰을 발급받습니다.</p>
+
+                <div class="endpoint">
+                    <span class="method method-post">POST</span>
+                    <span class="path">/auth/login</span>
+                </div>
+
+                <span class="badge badge-success">Public</span>
+                <span class="badge badge-info">인증 불필요</span>
+
+                <h3>요청 본문</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>필드</th>
+                            <th>타입</th>
+                            <th>필수</th>
+                            <th>설명</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>email</code></td>
+                            <td>String</td>
+                            <td>✅</td>
+                            <td>이메일 주소</td>
+                        </tr>
+                        <tr>
+                            <td><code>password</code></td>
+                            <td>String</td>
+                            <td>✅</td>
+                            <td>비밀번호</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>요청 예제</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">JavaScript (fetch)</span>
+                        <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                    </div>
+                    <pre>const response = await fetch('http://localhost:3000/api/v1/auth/login', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    email: 'user@example.com',
+    password: 'secure123!'
+  })
+});
+
+const data = await response.json();
+
+if (data.success) {
+  // 토큰 저장
+  localStorage.setItem('fleecat_token', data.data.token);
+  console.log('로그인 성공!', data.data.member);
+}</pre>
+                </div>
+
+                <h3>응답 예제 (200 OK)</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">JSON</span>
+                        <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                    </div>
+                    <pre>{
+  "success": true,
+  "message": "Login successful",
+  "data": {
+    "member": {
+      "member_id": 123,
+      "member_email": "user@example.com",
+      "member_nickname": "길동이",
+      "role": "buyer"
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  }
+}</pre>
+                </div>
+
+                <div class="alert alert-warning">
+                    <strong>⚠️ 보안:</strong> 로그인 실패 시 이메일/비밀번호 오류를 구분하지 않고 "Invalid credentials" 메시지만 반환합니다.
+                </div>
+
+                <!-- Try It Out -->
+                <div class="try-it-out">
+                    <h4>🧪 직접 테스트하기</h4>
+                    <form onsubmit="testLogin(event)">
+                        <div class="form-group">
+                            <label>이메일</label>
+                            <input type="email" id="login-email" placeholder="user@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label>비밀번호</label>
+                            <input type="password" id="login-password" placeholder="secure123!" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">로그인</button>
+                    </form>
+                    <div id="login-response" class="response-viewer"></div>
+                </div>
+            </section>
+
+            <!-- 소셜 로그인 API -->
+            <section id="social-login" class="api-section">
+                <h2>🌐 소셜 로그인 (Google/Kakao)</h2>
+                <p>Google 또는 Kakao 계정으로 간편하게 로그인합니다.</p>
+
+                <h3>전체 플로우</h3>
+                <div class="flow-diagram">
+                    <div class="flow-step">
+                        <div class="flow-number">1</div>
+                        <div class="flow-content">
+                            <strong>OAuth URL 요청</strong><br>
+                            프론트엔드 → 백엔드: GET /auth/social/google
+                        </div>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="flow-number">2</div>
+                        <div class="flow-content">
+                            <strong>OAuth URL 반환</strong><br>
+                            백엔드 → 프론트엔드: Google OAuth URL
+                        </div>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="flow-number">3</div>
+                        <div class="flow-content">
+                            <strong>Google 로그인</strong><br>
+                            프론트엔드 → Google: 사용자 리다이렉트
+                        </div>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="flow-number">4</div>
+                        <div class="flow-content">
+                            <strong>Callback</strong><br>
+                            Google → 프론트엔드: /auth/callback#access_token=...
+                        </div>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="flow-number">5</div>
+                        <div class="flow-content">
+                            <strong>토큰 교환</strong><br>
+                            프론트엔드 → 백엔드: POST /auth/social/google/token
+                        </div>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="flow-number">6</div>
+                        <div class="flow-content">
+                            <strong>JWT 발급</strong><br>
+                            백엔드 → 프론트엔드: JWT 토큰 + 회원 정보
+                        </div>
+                    </div>
+                </div>
+
+                <h3>1단계: OAuth URL 생성</h3>
+                <div class="endpoint">
+                    <span class="method method-get">GET</span>
+                    <span class="path">/auth/social/:provider</span>
+                </div>
+
+                <p><code>:provider</code> = <code>google</code> 또는 <code>kakao</code></p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">JavaScript</span>
+                        <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                    </div>
+                    <pre>// Google 로그인 버튼 클릭 시
+async function loginWithGoogle() {
+  const response = await fetch('/api/v1/auth/social/google');
+  const data = await response.json();
+
+  if (data.success) {
+    // Google 로그인 페이지로 리다이렉트
+    window.location.href = data.data.url;
+  }
+}</pre>
+                </div>
+
+                <h3>2단계: 콜백 처리 (access_token 추출)</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">JavaScript (callback.html)</span>
+                        <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                    </div>
+                    <pre>// URL 해시에서 access_token 추출
+const hash = window.location.hash.substring(1);
+const hashParams = new URLSearchParams(hash);
+const accessToken = hashParams.get('access_token');
+const refreshToken = hashParams.get('refresh_token');</pre>
+                </div>
+
+                <h3>3단계: 백엔드로 토큰 전송</h3>
+                <div class="endpoint">
+                    <span class="method method-post">POST</span>
+                    <span class="path">/auth/social/:provider/token</span>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">JavaScript</span>
+                        <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                    </div>
+                    <pre>const response = await fetch('/api/v1/auth/social/google/token', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    access_token: accessToken,
+    refresh_token: refreshToken
+  })
+});
+
+const data = await response.json();
+
+if (data.success) {
+  // JWT 토큰 저장
+  localStorage.setItem('fleecat_token', data.data.token);
+  localStorage.setItem('fleecat_user', JSON.stringify(data.data.member));
+
+  // 메인 페이지로 이동
+  window.location.href = '/dashboard';
+}</pre>
+                </div>
+
+                <h3>응답 예제 (200 OK)</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">JSON</span>
+                        <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                    </div>
+                    <pre>{
+  "success": true,
+  "message": "Social login successful",
+  "data": {
+    "member": {
+      "member_id": 456,
+      "member_email": "user@gmail.com",
+      "member_name": "홍길동",
+      "member_nickname": "google_user_1234",
+      "member_auth_provider": "google",
+      "role": "buyer"
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  }
+}</pre>
+                </div>
+
+                <div class="alert alert-success">
+                    <strong>✅ 자동 회원가입:</strong> 소셜 로그인 시 신규 회원은 자동으로 등록됩니다. 비밀번호는 NULL로 저장됩니다.
+                </div>
+
+                <!-- Try It Out -->
+                <div class="try-it-out">
+                    <h4>🧪 직접 테스트하기</h4>
+                    <p>실제 Google 로그인을 테스트하려면 다음 페이지를 방문하세요:</p>
+                    <a href="/test-google-login.html" target="_blank" class="btn btn-primary" style="display: inline-block; text-decoration: none;">
+                        Google 로그인 테스트 페이지 열기
+                    </a>
+                </div>
+            </section>
+
+            <!-- 에러 코드 -->
+            <section id="errors" class="api-section">
+                <h2>⚠️ 에러 코드</h2>
+
+                <h3>HTTP 상태 코드</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>코드</th>
+                            <th>설명</th>
+                            <th>발생 케이스</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>200</strong></td>
+                            <td>OK</td>
+                            <td>요청 성공 (로그인, 조회 등)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>201</strong></td>
+                            <td>Created</td>
+                            <td>리소스 생성 성공 (회원가입)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>400</strong></td>
+                            <td>Bad Request</td>
+                            <td>입력 검증 실패, 중복 데이터</td>
+                        </tr>
+                        <tr>
+                            <td><strong>401</strong></td>
+                            <td>Unauthorized</td>
+                            <td>인증 실패, JWT 토큰 문제</td>
+                        </tr>
+                        <tr>
+                            <td><strong>404</strong></td>
+                            <td>Not Found</td>
+                            <td>리소스를 찾을 수 없음</td>
+                        </tr>
+                        <tr>
+                            <td><strong>500</strong></td>
+                            <td>Internal Server Error</td>
+                            <td>서버 내부 오류</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>에러 응답 형식</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">JSON</span>
+                        <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                    </div>
+                    <pre>{
+  "success": false,
+  "message": "Email already exists",
+  "errors": [
+    {
+      "field": "email",
+      "message": "This email is already registered"
+    }
+  ]
+}</pre>
+                </div>
+            </section>
+
+            <!-- 전체 예제 -->
+            <section id="examples" class="api-section">
+                <h2>📚 완전한 React 예제</h2>
+
+                <h3>회원가입 + 로그인 폼</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">React Component</span>
+                        <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                    </div>
+                    <pre>import { useState } from 'react';
+import axios from 'axios';
+
+const API_BASE_URL = 'http://localhost:3000/api/v1';
+
+function AuthForm() {
+  const [isLogin, setIsLogin] = useState(true);
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    name: '',
+    nickname: '',
+    phone: ''
+  });
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      const endpoint = isLogin ? '/auth/login' : '/auth/register';
+      const payload = isLogin
+        ? { email: formData.email, password: formData.password }
+        : formData;
+
+      const response = await axios.post(`${API_BASE_URL}${endpoint}`, payload);
+
+      // 토큰 저장
+      localStorage.setItem('fleecat_token', response.data.data.token);
+      localStorage.setItem('fleecat_user', JSON.stringify(response.data.data.member));
+
+      // 메인 페이지로 이동
+      window.location.href = '/dashboard';
+    } catch (err) {
+      if (err.response) {
+        setError(err.response.data.message);
+      } else {
+        setError('서버와 통신할 수 없습니다.');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    &lt;div className="auth-form"&gt;
+      &lt;h2&gt;{isLogin ? '로그인' : '회원가입'}&lt;/h2&gt;
+
+      &lt;form onSubmit={handleSubmit}&gt;
+        &lt;input
+          type="email"
+          placeholder="이메일"
+          value={formData.email}
+          onChange={(e) =&gt; setFormData({ ...formData, email: e.target.value })}
+          required
+        /&gt;
+
+        &lt;input
+          type="password"
+          placeholder="비밀번호"
+          value={formData.password}
+          onChange={(e) =&gt; setFormData({ ...formData, password: e.target.value })}
+          required
+        /&gt;
+
+        {!isLogin && (
+          &lt;&gt;
+            &lt;input
+              type="text"
+              placeholder="이름"
+              value={formData.name}
+              onChange={(e) =&gt; setFormData({ ...formData, name: e.target.value })}
+              required
+            /&gt;
+            &lt;input
+              type="text"
+              placeholder="닉네임"
+              value={formData.nickname}
+              onChange={(e) =&gt; setFormData({ ...formData, nickname: e.target.value })}
+              required
+            /&gt;
+            &lt;input
+              type="text"
+              placeholder="전화번호 (선택)"
+              value={formData.phone}
+              onChange={(e) =&gt; setFormData({ ...formData, phone: e.target.value })}
+            /&gt;
+          &lt;/&gt;
+        )}
+
+        {error && &lt;div className="error"&gt;{error}&lt;/div&gt;}
+
+        &lt;button type="submit" disabled={loading}&gt;
+          {loading ? '처리 중...' : isLogin ? '로그인' : '회원가입'}
+        &lt;/button&gt;
+      &lt;/form&gt;
+
+      &lt;button onClick={() =&gt; setIsLogin(!isLogin)}&gt;
+        {isLogin ? '회원가입하기' : '로그인하기'}
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default AuthForm;</pre>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // API Base URL 자동 감지
+        const API_BASE_URL = window.location.hostname === 'localhost'
+            ? 'http://localhost:3000/api/v1'
+            : 'https://fleecat-production.up.railway.app/api/v1';
+
+        // 코드 복사 기능
+        function copyCode(button) {
+            const codeBlock = button.closest('.code-block');
+            const code = codeBlock.querySelector('pre').textContent;
+
+            navigator.clipboard.writeText(code).then(() => {
+                button.textContent = '✓ 복사됨';
+                button.classList.add('copied');
+
+                setTimeout(() => {
+                    button.textContent = '복사';
+                    button.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        // 사이드바 링크 활성화
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // 회원가입 테스트
+        async function testRegister(e) {
+            e.preventDefault();
+
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const name = document.getElementById('register-name').value;
+            const nickname = document.getElementById('register-nickname').value;
+            const phone = document.getElementById('register-phone').value;
+
+            const responseViewer = document.getElementById('register-response');
+            responseViewer.innerHTML = '<p>요청 중...</p>';
+            responseViewer.classList.add('show');
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email,
+                        password,
+                        name,
+                        nickname,
+                        phone: phone || undefined
+                    })
+                });
+
+                const data = await response.json();
+
+                const statusClass = response.ok ? 'alert-success' : 'alert-error';
+                responseViewer.innerHTML = `
+                    <div class="alert ${statusClass}">
+                        <strong>HTTP ${response.status}</strong>
+                    </div>
+                    <div class="code-block">
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                responseViewer.innerHTML = `
+                    <div class="alert alert-error">
+                        <strong>에러:</strong> ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        // 로그인 테스트
+        async function testLogin(e) {
+            e.preventDefault();
+
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            const responseViewer = document.getElementById('login-response');
+            responseViewer.innerHTML = '<p>요청 중...</p>';
+            responseViewer.classList.add('show');
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email,
+                        password
+                    })
+                });
+
+                const data = await response.json();
+
+                const statusClass = response.ok ? 'alert-success' : 'alert-error';
+                responseViewer.innerHTML = `
+                    <div class="alert ${statusClass}">
+                        <strong>HTTP ${response.status}</strong>
+                    </div>
+                    <div class="code-block">
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    </div>
+                `;
+
+                // 성공 시 토큰 저장
+                if (data.success) {
+                    localStorage.setItem('fleecat_token', data.data.token);
+                    responseViewer.innerHTML += `
+                        <div class="alert alert-success">
+                            ✅ JWT 토큰이 localStorage에 저장되었습니다!
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                responseViewer.innerHTML = `
+                    <div class="alert alert-error">
+                        <strong>에러:</strong> ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        // 부드러운 스크롤
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

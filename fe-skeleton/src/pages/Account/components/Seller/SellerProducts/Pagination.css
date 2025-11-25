@@ -1,0 +1,94 @@
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.pagination-btn,
+.pagination-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 8px;
+  border: 1px solid var(--border-color);
+  background: white;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.pagination-btn:hover:not(:disabled),
+.pagination-page:hover:not(.active) {
+  background: var(--bg-secondary);
+  border-color: var(--primary-color);
+}
+
+.pagination-btn:focus:not(:disabled),
+.pagination-page:focus:not(.active) {
+  border-color: var(--color-gray-400);
+  outline: none;
+}
+
+.pagination-btn:active:not(:disabled),
+.pagination-page:active:not(.active) {
+  background: var(--bg-secondary);
+  transform: scale(0.98);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagination-page.active {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+.pagination-page.active:focus {
+  border-color: var(--primary-color);
+  outline: none;
+}
+
+.pagination-page.active:active {
+  background: var(--color-primary-hover);
+  transform: scale(0.98);
+}
+
+.pagination-ellipsis {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+/* 반응형 */
+@media (max-width: 480px) {
+  .pagination {
+    gap: 4px;
+  }
+
+  .pagination-btn,
+  .pagination-page {
+    min-width: 32px;
+    height: 32px;
+    font-size: 13px;
+  }
+
+  .pagination-ellipsis {
+    min-width: 24px;
+    height: 32px;
+  }
+}

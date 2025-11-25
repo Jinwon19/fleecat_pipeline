@@ -1,0 +1,61 @@
+.benefits {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.benefit-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 8px;
+  background: #f9fafb;
+}
+
+.benefit-item.coupon {
+  border-left: 4px solid var(--primary-color, #FF1493);
+}
+
+.benefit-item.points-expiry {
+  border-left: 4px solid #f59e0b;
+}
+
+.benefit-icon {
+  color: var(--primary-color, #FF1493);
+  flex-shrink: 0;
+}
+
+.benefit-icon.warning {
+  color: #f59e0b;
+}
+
+.benefit-text {
+  font-size: 0.875rem;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.benefit-text strong {
+  color: var(--primary-color, #FF1493);
+  font-weight: 600;
+}
+
+.expiry-date {
+  color: #666;
+  font-size: 0.8rem;
+}
+
+/* 반응형: 모바일 */
+@media (max-width: 640px) {
+  .benefit-text {
+    font-size: 0.8rem;
+  }
+}

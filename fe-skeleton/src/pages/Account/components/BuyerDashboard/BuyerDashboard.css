@@ -1,0 +1,53 @@
+.buyer-dashboard {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Section 기본 스타일 */
+.order-status-section {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+}
+
+/* Desktop 레이아웃: 최근 주문 + 빠른 메뉴 가로 배치 - 선택사항 */
+/* @media (min-width: 1024px) {
+  .dashboard-row {
+    display: grid;
+    grid-template-columns: 60% 40%;
+    gap: 1.5rem;
+  }
+} */
+
+/* 반응형: 태블릿 */
+@media (max-width: 1024px) {
+  .buyer-dashboard {
+    padding: 1.5rem;
+  }
+}
+
+/* 반응형: 모바일 */
+@media (max-width: 640px) {
+  .buyer-dashboard {
+    padding: 1rem;
+  }
+
+  .dashboard-container {
+    gap: 1rem;
+  }
+}

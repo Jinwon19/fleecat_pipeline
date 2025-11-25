@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>판매사 구성원 관리 - Fleecat Admin</title>
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>🔐 Fleecat Admin</h2>
+            </div>
+            <nav>
+                <ul class="sidebar-nav">
+                    <li><a href="dashboard.html">📊 대시보드</a></li>
+                    <li><a href="members.html">👥 회원 관리</a></li>
+                    <li><a href="tenants.html">🏪 판매사 관리</a></li>
+                    <li><a href="tenant-members.html" class="active">👔 판매사 구성원 관리</a></li>
+                    <li><a href="categories.html">📂 카테고리 관리</a></li>
+                    <li><a href="products.html">🛍️ 상품 관리</a></li>
+                    <li><a href="orders.html">📦 주문 관리</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1>판매사 구성원 관리</h1>
+                <div class="page-actions">
+                    <span id="userEmail"></span>
+                    <button class="btn btn-secondary btn-sm" id="logoutButton">로그아웃</button>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="card">
+                <div class="card-header">검색 및 필터</div>
+                <div class="card-body">
+                    <div class="filter-row">
+                        <select id="tenantFilter" class="form-control">
+                            <option value="">전체 판매사</option>
+                        </select>
+                        <input type="text" id="searchInput" placeholder="회원명 검색" class="form-control">
+                        <select id="statusFilter" class="form-control">
+                            <option value="">전체 상태</option>
+                            <option value="pending">승인 대기</option>
+                            <option value="approved">승인됨</option>
+                            <option value="rejected">거절됨</option>
+                        </select>
+                        <select id="roleFilter" class="form-control">
+                            <option value="">전체 역할</option>
+                            <option value="owner">Owner</option>
+                            <option value="member">Member</option>
+                        </select>
+                        <button class="btn btn-primary" id="searchButton">검색</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TenantMember Stats -->
+            <div class="stats-grid" id="tenantMemberStatsGrid">
+                <div class="stat-card">
+                    <h3>전체 구성원</h3>
+                    <div class="stat-value" id="totalMembers">-</div>
+                </div>
+                <div class="stat-card">
+                    <h3>승인 대기</h3>
+                    <div class="stat-value" id="pendingMembers">-</div>
+                </div>
+                <div class="stat-card">
+                    <h3>승인됨</h3>
+                    <div class="stat-value" id="approvedMembers">-</div>
+                </div>
+                <div class="stat-card">
+                    <h3>거절됨</h3>
+                    <div class="stat-value" id="rejectedMembers">-</div>
+                </div>
+            </div>
+
+            <!-- TenantMember List -->
+            <div class="card">
+                <div class="card-header">
+                    판매사 구성원 목록
+                    <span id="memberCount" class="badge">0</span>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>판매사</th>
+                                <th>회원명</th>
+                                <th>이메일</th>
+                                <th>역할</th>
+                                <th>상태</th>
+                                <th>신청일</th>
+                                <th>작업</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tenantMemberTableBody">
+                            <tr>
+                                <td colspan="8" class="text-center">데이터를 불러오는 중...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" id="pagination"></div>
+        </main>
+    </div>
+
+    <!-- TenantMember Detail Modal -->
+    <div id="memberModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>구성원 상세</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body" id="memberDetailContent">
+                <!-- Member details will be loaded here -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="closeModal">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Approval Modal -->
+    <div id="approvalModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>구성원 승인</h2>
+                <span class="close-approval">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>이 구성원을 승인하시겠습니까?</p>
+                <div id="approvalMemberInfo" style="background: #f8f9fa; padding: 15px; border-radius: 6px; margin-top: 10px;">
+                    <!-- Member info will be inserted here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" id="confirmApprove">승인</button>
+                <button class="btn btn-secondary" id="cancelApprove">취소</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rejection Modal -->
+    <div id="rejectionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>구성원 거절</h2>
+                <span class="close-rejection">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="rejectionMemberInfo" style="background: #f8f9fa; padding: 15px; border-radius: 6px; margin-bottom: 15px;">
+                    <!-- Member info will be inserted here -->
+                </div>
+                <div class="form-group">
+                    <label for="rejectReason">거절 사유 (선택)</label>
+                    <textarea id="rejectReason" class="form-control" rows="4" placeholder="거절 사유를 입력하세요"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" id="confirmReject">거절</button>
+                <button class="btn btn-secondary" id="cancelReject">취소</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/tenantMembers.js"></script>
+</body>
+</html>

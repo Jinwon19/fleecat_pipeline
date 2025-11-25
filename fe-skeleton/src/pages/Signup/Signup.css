@@ -1,0 +1,246 @@
+/* Signup Page Styles - Matching Login Design */
+
+.signup-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  padding: 20px;
+}
+
+.signup-container {
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  transform: translateY(-30px);
+}
+
+/* 로고 */
+.signup-logo {
+  display: block;
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #FF1493;
+  text-decoration: none;
+  margin-bottom: 40px;
+  transition: transform 0.2s;
+}
+
+.signup-logo:hover {
+  transform: scale(1.05);
+  color: #FF1493;
+}
+
+/* 회원가입 폼 */
+.signup-form {
+  display: grid;
+  gap: 12px;
+  width: 250px;
+  margin: 0 auto;
+}
+
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.signup-input {
+  padding: 9px 11px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+}
+
+.signup-input:focus {
+  outline: none;
+  border-color: #e8a5a5;
+  box-shadow: 0 0 0 4px rgba(232, 165, 165, 0.2);
+}
+
+.signup-input.error {
+  border-color: #ef4444;
+}
+
+.error-message {
+  font-size: 0.85rem;
+  color: #ef4444;
+  margin-top: 4px;
+  animation: fadeIn 0.2s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.signup-button {
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  background: #FF1493;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 8px;
+}
+
+.signup-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 20, 147, 0.4);
+  background: #E6127F;
+}
+
+.signup-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 하단 링크 */
+.signup-footer {
+  text-align: center;
+  margin-top: 24px;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.signup-footer a {
+  color: #000;
+  text-decoration: none;
+  font-weight: 700;
+  transition: color 0.2s;
+}
+
+.signup-footer a:hover {
+  color: #e8a5a5;
+  text-decoration: none;
+}
+
+/* 소셜 회원가입 구분선 */
+.social-divider {
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 16px;
+  color: #999;
+  font-size: 0.9rem;
+}
+
+/* 소셜 로그인 아이콘 */
+.social-login-icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.social-icon-button {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  font-size: 1.3rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.social-icon-button:hover {
+  transform: scale(1.1);
+}
+
+/* 구글 */
+.social-icon-google {
+  background: #fff;
+  color: #4285f4;
+  border: 2px solid #4285f4;
+}
+
+.social-icon-google:hover {
+  background: #4285f4;
+  color: #fff;
+}
+
+/* 카카오 */
+.social-icon-kakao {
+  background: #FEE500;
+  color: #000;
+}
+
+.social-icon-kakao:hover {
+  background: #fada0a;
+}
+
+/* 애플 */
+.social-icon-apple {
+  background: #000;
+  color: #fff;
+}
+
+.social-icon-apple:hover {
+  background: #333;
+}
+
+/* 네이버 */
+.social-icon-naver {
+  background: #03C75A;
+  color: #fff;
+}
+
+.social-icon-naver:hover {
+  background: #02b351;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .signup-container {
+    max-width: 500px;
+  }
+}
+
+@media (max-width: 480px) {
+  .signup-container {
+    max-width: 90%;
+    padding: 32px 24px;
+    transform: translateY(-20px);
+  }
+
+  .signup-logo {
+    font-size: 2rem;
+    margin-bottom: 32px;
+  }
+
+  .social-login-icons {
+    gap: 12px;
+  }
+
+  .social-icon-button {
+    width: 44px;
+    height: 44px;
+    font-size: 1.1rem;
+  }
+}

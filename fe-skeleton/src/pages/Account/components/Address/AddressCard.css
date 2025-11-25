@@ -1,0 +1,161 @@
+/* Address Card Styles */
+.address-card {
+  position: relative;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.2s ease;
+}
+
+.address-card:hover {
+  border-color: #FF1493;
+  box-shadow: 0 4px 12px rgba(255, 20, 147, 0.1);
+}
+
+/* Default Badge */
+.default-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  padding: 6px 12px;
+  background: #FF1493;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 20px;
+}
+
+/* Address Info */
+.address-info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.address-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.address-row.address-full {
+  flex-direction: column;
+  gap: 8px;
+}
+
+.address-label {
+  min-width: 60px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #8e8e8e;
+}
+
+.address-value {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #213547;
+}
+
+.address-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.95rem;
+  color: #213547;
+}
+
+.postal-code {
+  font-weight: 500;
+  color: #666;
+}
+
+.address-main {
+  font-weight: 500;
+}
+
+.address-detail {
+  color: #666;
+}
+
+/* Action Buttons */
+.address-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btn-set-default,
+.btn-edit-address,
+.btn-delete-address {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-set-default {
+  background: #f0f0f0;
+  color: #FF1493;
+}
+
+.btn-set-default:hover {
+  background: #ffebf5;
+}
+
+.btn-edit-address {
+  background: #FF1493;
+  color: white;
+}
+
+.btn-edit-address:hover {
+  background: #E6127F;
+  transform: translateY(-1px);
+}
+
+.btn-delete-address {
+  background: #f0f0f0;
+  color: #666;
+}
+
+.btn-delete-address:hover {
+  background: #ffe0e0;
+  color: #ff4444;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .address-card {
+    padding: 20px 16px;
+  }
+
+  .default-badge {
+    position: static;
+    display: inline-block;
+    margin-bottom: 12px;
+  }
+
+  .address-row {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .address-label {
+    min-width: auto;
+    font-size: 0.85rem;
+  }
+
+  .address-actions {
+    flex-direction: column;
+  }
+
+  .btn-set-default,
+  .btn-edit-address,
+  .btn-delete-address {
+    width: 100%;
+  }
+}

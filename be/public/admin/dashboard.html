@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>대시보드 - Fleecat Admin</title>
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>🔐 Fleecat Admin</h2>
+            </div>
+            <nav>
+                <ul class="sidebar-nav">
+                    <li><a href="dashboard.html" class="active">📊 대시보드</a></li>
+                    <li><a href="members.html">👥 회원 관리</a></li>
+                    <li><a href="tenants.html">🏪 판매사 관리</a></li>
+                    <li><a href="tenant-members.html">👔 판매사 구성원 관리</a></li>
+                    <li><a href="categories.html">📂 카테고리 관리</a></li>
+                    <li><a href="products.html">🛍️ 상품 관리</a></li>
+                    <li><a href="orders.html">📦 주문 관리</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1>대시보드</h1>
+                <div class="page-actions">
+                    <span id="userEmail"></span>
+                    <button class="btn btn-secondary btn-sm" id="logoutButton">로그아웃</button>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid" id="statsGrid">
+                <div class="stat-card">
+                    <h3>전체 회원</h3>
+                    <div class="stat-value" id="totalMembers">-</div>
+                    <div class="stat-change positive" id="memberChange">+0%</div>
+                </div>
+                <div class="stat-card">
+                    <h3>전체 주문</h3>
+                    <div class="stat-value" id="totalOrders">-</div>
+                    <div class="stat-change positive" id="orderChange">+0%</div>
+                </div>
+                <div class="stat-card">
+                    <h3>전체 상품</h3>
+                    <div class="stat-value" id="totalProducts">-</div>
+                </div>
+                <div class="stat-card">
+                    <h3>총 매출</h3>
+                    <div class="stat-value" id="totalRevenue">-</div>
+                    <div class="stat-change positive" id="revenueChange">+0%</div>
+                </div>
+            </div>
+
+            <!-- Recent Activities -->
+            <div class="card">
+                <div class="card-header">최근 활동</div>
+                <div id="recentActivitiesContent">
+                    <p class="text-center text-muted">데이터를 불러오는 중...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

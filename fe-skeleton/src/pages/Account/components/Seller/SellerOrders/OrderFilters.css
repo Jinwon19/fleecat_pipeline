@@ -1,0 +1,132 @@
+.order-filters {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.filter-search {
+  flex: 1;
+  min-width: 250px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 14px;
+  color: var(--text-secondary);
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 14px 10px 44px;
+  font-size: 14px;
+  color: var(--text-primary);
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.search-input::placeholder {
+  color: var(--text-secondary);
+}
+
+.search-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.period-filter {
+  display: flex;
+  gap: 8px;
+  background: var(--bg-secondary);
+  padding: 4px;
+  border-radius: 8px;
+}
+
+.period-btn {
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  outline: none;
+}
+
+.period-btn:hover {
+  background: white;
+  color: var(--text-primary);
+}
+
+.period-btn:focus {
+  background: white;
+  outline: none;
+}
+
+.period-btn:active {
+  background: var(--bg-secondary);
+  transform: scale(0.98);
+}
+
+.period-btn.active {
+  background: white;
+  color: var(--text-primary);
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.period-btn.active:hover {
+  background: white;
+  color: var(--text-primary);
+}
+
+.period-btn.active:focus {
+  background: white;
+  outline: none;
+}
+
+.period-btn.active:active {
+  background: var(--bg-secondary);
+  transform: scale(0.98);
+}
+
+.order-filters .select-wrapper {
+  min-width: 150px;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .order-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-search {
+    min-width: 100%;
+  }
+
+  .period-filter {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .period-btn {
+    flex: 1;
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .order-filters .select-wrapper {
+    min-width: 100%;
+  }
+}

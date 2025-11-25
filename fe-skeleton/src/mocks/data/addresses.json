@@ -1,0 +1,64 @@
+{
+  "addresses": [
+    {
+      "member_address_id": 1,
+      "member_id": 1,
+      "member_address_alias": "집",
+      "member_address_recipient": "홍길동",
+      "member_address_phone": "010-1234-5678",
+      "member_address_zipcode": "06234",
+      "member_address_address1": "서울특별시 강남구 테헤란로 123",
+      "member_address_address2": "456호",
+      "member_address_is_default": true,
+      "member_address_last_used_at": null,
+      "member_address_status": "active",
+      "member_address_created_at": "2025-09-01T00:00:00Z",
+      "member_address_updated_at": "2025-09-01T00:00:00Z"
+    },
+    {
+      "member_address_id": 2,
+      "member_id": 1,
+      "member_address_alias": "회사",
+      "member_address_recipient": "홍길동",
+      "member_address_phone": "010-1234-5678",
+      "member_address_zipcode": "06542",
+      "member_address_address1": "서울특별시 서초구 서초대로 789",
+      "member_address_address2": "10층 1001호",
+      "member_address_is_default": false,
+      "member_address_last_used_at": null,
+      "member_address_status": "active",
+      "member_address_created_at": "2025-09-05T00:00:00Z",
+      "member_address_updated_at": "2025-09-05T00:00:00Z"
+    },
+    {
+      "member_address_id": 3,
+      "member_id": 1,
+      "member_address_alias": "부모님댁",
+      "member_address_recipient": "홍길동",
+      "member_address_phone": "010-1234-5678",
+      "member_address_zipcode": "13579",
+      "member_address_address1": "경기도 성남시 분당구 판교로 456",
+      "member_address_address2": "A동 202호",
+      "member_address_is_default": false,
+      "member_address_last_used_at": null,
+      "member_address_status": "active",
+      "member_address_created_at": "2025-09-10T00:00:00Z",
+      "member_address_updated_at": "2025-09-10T00:00:00Z"
+    },
+    {
+      "member_address_id": 4,
+      "member_id": 2,
+      "member_address_alias": "자택",
+      "member_address_recipient": "김철수",
+      "member_address_phone": "010-2345-6789",
+      "member_address_zipcode": "12345",
+      "member_address_address1": "서울특별시 송파구 올림픽로 321",
+      "member_address_address2": null,
+      "member_address_is_default": true,
+      "member_address_last_used_at": null,
+      "member_address_status": "active",
+      "member_address_created_at": "2025-09-15T00:00:00Z",
+      "member_address_updated_at": "2025-09-15T00:00:00Z"
+    }
+  ]
+}

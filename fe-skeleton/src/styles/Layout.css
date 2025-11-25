@@ -1,0 +1,80 @@
+/* Global Layout System */
+:root {
+  --container-max-width: 1650px;
+  --container-padding: 0 16px;
+}
+
+/* Universal wrap container for consistent 1650px layout */
+.wrap {
+  width: 1200px;
+  margin: 0 auto;
+  padding: var(--container-padding);
+}
+
+/* Main layout structure */
+.layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Skip Link - 접근성 */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #FF1493;
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+  font-weight: 600;
+  z-index: 10000;
+  border-radius: 0 0 4px 0;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 3px solid #E6127F;
+  outline-offset: 2px;
+}
+
+.layout__main {
+  flex: 1;
+  padding: 24px 0;
+}
+
+.layout__footer {
+  padding: 16px 0;
+  border-top: 1px solid #ddd;
+  text-align: center;
+  background-color: #f8f8f8;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1680px) {
+  .wrap {
+    padding: var(--container-padding) 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .wrap {
+    padding: var(--container-padding) 16px;
+  }
+
+  .layout__main {
+    padding: 16px 0;
+  }
+
+  .layout__footer {
+    padding: 12px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .wrap {
+    padding: var(--container-padding) 12px;
+  }
+}

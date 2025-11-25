@@ -1,0 +1,72 @@
+# Environment variables
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+*.env
+
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Python
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build outputs
+dist/
+build/
+*.local
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# 크롤링 파이프라인
+chromedriver.exe
+geckodriver.exe
+fleamarket.db
+fleamarket_posts.json
+fleamarket_detail.json
+fleamarket_structured.json
+geocoding_failures.json
+
+# 분석 로그 파일
+*.txt
+!requirements.txt
+summary.txt
+
+# 백업 및 임시 파일
+*.backup
+*.bak
+*.tmp
+
+# Windows 예약 파일명
+nul
+con
+prn
+aux

@@ -1,0 +1,109 @@
+/* Order Filters Styles */
+.order-filters {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  transition: all 0.2s ease;
+}
+
+.order-filters:hover {
+  border-color: #d0d0d0;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.filter-label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #8e8e8e;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.status-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 8px 16px;
+  background: white;
+  color: #666;
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  outline: none;
+}
+
+.filter-btn:hover {
+  border-color: #FF1493;
+  color: #FF1493;
+}
+
+.filter-btn:focus {
+  border-color: var(--color-gray-400);
+  outline: none;
+}
+
+.filter-btn:active {
+  background: #f8f8f8;
+  transform: scale(0.98);
+}
+
+.filter-btn.active {
+  background: #FF1493;
+  color: white;
+  border-color: #FF1493;
+}
+
+.filter-btn.active:focus {
+  border-color: #FF1493;
+  outline: none;
+}
+
+.filter-btn.active:active {
+  background: #E6127F;
+  transform: scale(0.98);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .order-filters {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .order-filters {
+    padding: 16px;
+    gap: 20px;
+  }
+
+  .filter-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .filter-btn {
+    width: 100%;
+  }
+}

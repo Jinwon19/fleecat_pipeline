@@ -1,0 +1,68 @@
+/* Spinner Container */
+.spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 20px;
+}
+
+/* Spinner Circle */
+.spinner-circle {
+  border-radius: 50%;
+  border: 3px solid #f0f0f0;
+  border-top-color: #FF1493;
+  animation: spinner-rotate 0.8s linear infinite;
+}
+
+@keyframes spinner-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Sizes */
+.spinner--small .spinner-circle {
+  width: 24px;
+  height: 24px;
+  border-width: 2px;
+}
+
+.spinner--medium .spinner-circle {
+  width: 40px;
+  height: 40px;
+  border-width: 3px;
+}
+
+.spinner--large .spinner-circle {
+  width: 56px;
+  height: 56px;
+  border-width: 4px;
+}
+
+/* Message */
+.spinner-message {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #8e8e8e;
+  text-align: center;
+}
+
+/* Full Page Overlay */
+.spinner-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.spinner-overlay .spinner {
+  padding: 40px;
+}
