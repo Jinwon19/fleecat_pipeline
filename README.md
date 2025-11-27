@@ -255,15 +255,6 @@ This project is licensed under the MIT License.
 
 ---
 
-## 👤 개발자
-
-**Full-Stack Developer**
-- GitHub: [Your GitHub Profile]
-- Email: [Your Email]
-- Portfolio: [Your Portfolio Link]
-
----
-
 ## 🙏 감사의 말
 
 이 프로젝트는 웹크롤링부터 AI 데이터 정제, DB 설계, API 개발, 프론트엔드 시각화까지 **풀스택 개발의 전 과정**을 경험하기 위해 제작되었습니다.
